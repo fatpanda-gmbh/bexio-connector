@@ -44,21 +44,60 @@ use Fatpanda\BexioConnector\Request\Contacts\Titles\SearchTitlesRequest;
 use Fatpanda\BexioConnector\Request\Contacts\Titles\ShowTitleRequest;
 use Fatpanda\BexioConnector\Request\Other\Companies\ListCompaniesRequest;
 use Fatpanda\BexioConnector\Request\Other\Companies\ShowCompanyRequest;
+use Fatpanda\BexioConnector\Request\Other\Countries\CreateCountryRequest;
+use Fatpanda\BexioConnector\Request\Other\Countries\DeleteCountryRequest;
+use Fatpanda\BexioConnector\Request\Other\Countries\EditCountryRequest;
 use Fatpanda\BexioConnector\Request\Other\Countries\ListCountriesRequest;
+use Fatpanda\BexioConnector\Request\Other\Countries\SearchCountriesRequest;
 use Fatpanda\BexioConnector\Request\Other\Countries\ShowCountryRequest;
 use Fatpanda\BexioConnector\Request\Other\Languages\ListLanguagesRequest;
+use Fatpanda\BexioConnector\Request\Other\Languages\SearchLanguagesRequest;
+use Fatpanda\BexioConnector\Request\Other\Notes\CreateNoteRequest;
+use Fatpanda\BexioConnector\Request\Other\Notes\DeleteNoteRequest;
+use Fatpanda\BexioConnector\Request\Other\Notes\EditNoteRequest;
 use Fatpanda\BexioConnector\Request\Other\Notes\ListNotesRequest;
+use Fatpanda\BexioConnector\Request\Other\Notes\SearchNotesRequest;
 use Fatpanda\BexioConnector\Request\Other\Notes\ShowNoteRequest;
 use Fatpanda\BexioConnector\Request\Other\PaymentTypes\ListPaymentTypesRequest;
+use Fatpanda\BexioConnector\Request\Other\PaymentTypes\SearchPaymentTypesRequest;
+use Fatpanda\BexioConnector\Request\Other\Tasks\CreateTaskRequest;
+use Fatpanda\BexioConnector\Request\Other\Tasks\DeleteTaskRequest;
+use Fatpanda\BexioConnector\Request\Other\Tasks\EditTaskRequest;
 use Fatpanda\BexioConnector\Request\Other\Tasks\ListTaskPrioritiesRequest;
 use Fatpanda\BexioConnector\Request\Other\Tasks\ListTaskStatusesRequest;
+use Fatpanda\BexioConnector\Request\Other\Tasks\SearchTasksRequest;
 use Fatpanda\BexioConnector\Request\Other\Tasks\ShowTaskRequest;
 use Fatpanda\BexioConnector\Request\Other\Tasks\ListTasksRequest;
+use Fatpanda\BexioConnector\Request\Other\Units\CreateUnitRequest;
+use Fatpanda\BexioConnector\Request\Other\Units\DeleteUnitRequest;
+use Fatpanda\BexioConnector\Request\Other\Units\EditUnitRequest;
 use Fatpanda\BexioConnector\Request\Other\Units\ListUnitsRequest;
+use Fatpanda\BexioConnector\Request\Other\Units\SearchUnitsRequest;
 use Fatpanda\BexioConnector\Request\Other\Units\ShowUnitRequest;
 use Fatpanda\BexioConnector\Request\Other\Users\ListUsersRequest;
 use Fatpanda\BexioConnector\Request\Other\Users\ShowUserRequest;
+use Fatpanda\BexioConnector\Request\Projects\BusinessActivities\CreateBusinessActivityRequest;
+use Fatpanda\BexioConnector\Request\Projects\BusinessActivities\ListBusinessActivitiesRequest;
+use Fatpanda\BexioConnector\Request\Projects\BusinessActivities\SearchBusinessActivitiesRequest;
+use Fatpanda\BexioConnector\Request\Projects\CommunicationTypes\ListCommunicationTypesRequest;
+use Fatpanda\BexioConnector\Request\Projects\CommunicationTypes\SearchCommunicationTypesRequest;
+use Fatpanda\BexioConnector\Request\Projects\Projects\ArchiveProjectRequest;
+use Fatpanda\BexioConnector\Request\Projects\Projects\CreateProjectRequest;
+use Fatpanda\BexioConnector\Request\Projects\Projects\DeleteProjectRequest;
+use Fatpanda\BexioConnector\Request\Projects\Projects\EditProjectRequest;
+use Fatpanda\BexioConnector\Request\Projects\Projects\ListProjectsRequest;
+use Fatpanda\BexioConnector\Request\Projects\Projects\ListProjectStatusRequest;
+use Fatpanda\BexioConnector\Request\Projects\Projects\ListProjectTypesRequest;
+use Fatpanda\BexioConnector\Request\Projects\Projects\SearchProjectsRequest;
+use Fatpanda\BexioConnector\Request\Projects\Projects\ShowProjectRequest;
+use Fatpanda\BexioConnector\Request\Projects\Projects\UnarchiveProjectRequest;
+use Fatpanda\BexioConnector\Request\Projects\Timesheets\CreateTimesheetRequest;
+use Fatpanda\BexioConnector\Request\Projects\Timesheets\DeleteTimesheetRequest;
+use Fatpanda\BexioConnector\Request\Projects\Timesheets\EditTimesheetRequest;
+use Fatpanda\BexioConnector\Request\Projects\Timesheets\ListTimesheetsRequest;
 use Fatpanda\BexioConnector\Request\Projects\Timesheets\ListTimesheetStatusRequest;
+use Fatpanda\BexioConnector\Request\Projects\Timesheets\SearchTimesheetsRequest;
+use Fatpanda\BexioConnector\Request\Projects\Timesheets\ShowTimesheetRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\CreateInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\DeleteInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\EditInvoiceRequest;
@@ -80,6 +119,23 @@ use Fatpanda\BexioConnector\RequestBody\Contacts\Salutations\SalutationsSearchBo
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactSectors\ContactSectorsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Titles\TitlesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Titles\TitleBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Countries\CountriesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Countries\CountryBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Languages\LanguagesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Notes\NoteBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Notes\NotesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\PaymentTypes\PaymentTypesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Tasks\TaskBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Tasks\TasksSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Units\UnitBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Units\UnitsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\BusinessActivities\BusinessActivitiesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\BusinessActivities\BusinessActivityBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\CommunicationTypes\CommunicationTypesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\Projects\ProjectBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\Projects\ProjectsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\RequestBodyInterface;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
@@ -99,6 +155,12 @@ use Fatpanda\BexioConnector\RequestQuery\Other\TasksRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\TaskStatusesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\UnitsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\UsersRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\BusinessActivitiesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\CommunicationTypesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\ProjectsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\ProjectStatusesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\ProjectTypesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetStatusRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
@@ -438,11 +500,6 @@ class BexioConnector
     }
 
     // Contacts\Contacts
-    // todo: Create contact
-    // todo: Search contacts
-    // todo: Edit a contact
-    // todo: Delete a contact
-    // todo: Bulk create contacts
 
     /**
      * @param ContactsRequestQuery|null $query
@@ -706,6 +763,30 @@ class BexioConnector
     }
 
     /**
+     * @param CountryBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCountry(CountryBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateCountryRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param CountriesSearchBody $body
+     * @param CountriesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchCountries(CountriesSearchBody $body, ?CountriesRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchCountriesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
      * @param int $countryId
      * @return Response|SuccessResponse|ErrorResponse
      */
@@ -713,6 +794,30 @@ class BexioConnector
     {
         $this->pathParameters['country_id'] = $countryId;
         $request = new ShowCountryRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $countryId
+     * @param CountryBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putCountry(int $countryId, CountryBody $body): Response
+    {
+        $this->pathParameters['country_id'] = $countryId;
+        $this->body = $body;
+        $request = new EditCountryRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $countryId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteCountry(int $countryId): Response
+    {
+        $this->pathParameters['country_id'] = $countryId;
+        $request = new DeleteCountryRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
@@ -726,6 +831,19 @@ class BexioConnector
     {
         $this->query = $query;
         $request = new ListLanguagesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param LanguagesSearchBody $body
+     * @param LanguagesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchLanguages(LanguagesSearchBody $body, ?LanguagesRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchLanguagesRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
@@ -743,6 +861,30 @@ class BexioConnector
     }
 
     /**
+     * @param NoteBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postNote(NoteBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateNoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param NotesSearchBody $body
+     * @param NotesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchNotes(NotesSearchBody $body, ?NotesRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchNotesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
      * @param int $noteId
      * @return Response|SuccessResponse|ErrorResponse
      */
@@ -750,6 +892,30 @@ class BexioConnector
     {
         $this->pathParameters['note_id'] = $noteId;
         $request = new ShowNoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $noteId
+     * @param NoteBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putNote(int $noteId, NoteBody $body): Response
+    {
+        $this->pathParameters['note_id'] = $noteId;
+        $this->body = $body;
+        $request = new EditNoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $noteId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteNote(int $noteId): Response
+    {
+        $this->pathParameters['note_id'] = $noteId;
+        $request = new DeleteNoteRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
@@ -763,6 +929,19 @@ class BexioConnector
     {
         $this->query = $query;
         $request = new ListPaymentTypesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param PaymentTypesSearchBody $body
+     * @param PaymentTypesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchPaymentTypes(PaymentTypesSearchBody $body, ?PaymentTypesRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchPaymentTypesRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
@@ -780,6 +959,30 @@ class BexioConnector
     }
 
     /**
+     * @param TaskBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postTask(TaskBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateTaskRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param TasksSearchBody $body
+     * @param TasksRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchTasks(TasksSearchBody $body, ?TasksRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchTasksRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
      * @param int $taskId
      * @return Response|SuccessResponse|ErrorResponse
      */
@@ -787,6 +990,30 @@ class BexioConnector
     {
         $this->pathParameters['task_id'] = $taskId;
         $request = new ShowTaskRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $taskId
+     * @param TaskBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putTask(int $taskId, TaskBody $body): Response
+    {
+        $this->pathParameters['task_id'] = $taskId;
+        $this->body = $body;
+        $request = new EditTaskRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $taskId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteTask(int $taskId): Response
+    {
+        $this->pathParameters['task_id'] = $taskId;
+        $request = new DeleteTaskRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
@@ -826,6 +1053,30 @@ class BexioConnector
     }
 
     /**
+     * @param UnitBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postUnit(UnitBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateUnitRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param UnitsSearchBody $body
+     * @param UnitsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchUnits(UnitsSearchBody $body, ?UnitsRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchUnitsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
      * @param int $unitId
      * @return Response|SuccessResponse|ErrorResponse
      */
@@ -833,6 +1084,30 @@ class BexioConnector
     {
         $this->pathParameters['unit_id'] = $unitId;
         $request = new ShowUnitRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $unitId
+     * @param UnitBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putUnit(int $unitId, UnitBody $body): Response
+    {
+        $this->pathParameters['unit_id'] = $unitId;
+        $this->body = $body;
+        $request = new EditUnitRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $unitId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteUnit(int $unitId): Response
+    {
+        $this->pathParameters['unit_id'] = $unitId;
+        $request = new DeleteUnitRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
@@ -861,7 +1136,193 @@ class BexioConnector
     }
 
     // Projects
+    // Projects\Projects
+
+    /**
+     * @param ProjectsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getProjectsList(?ProjectsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListProjectsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param ProjectBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postProject(ProjectBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateProjectRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param ProjectsSearchBody $body
+     * @param ProjectsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchProjects(ProjectsSearchBody $body, ?ProjectsRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchProjectsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $projectId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getProject(int $projectId): Response
+    {
+        $this->pathParameters['project_id'] = $projectId;
+        $request = new ShowProjectRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $projectId
+     * @param ProjectBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putProject(int $projectId, ProjectBody $body): Response
+    {
+        $this->pathParameters['project_id'] = $projectId;
+        $this->body = $body;
+        $request = new EditProjectRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $projectId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteProject(int $projectId): Response
+    {
+        $this->pathParameters['project_id'] = $projectId;
+        $request = new DeleteProjectRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $projectId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postArchiveProject(int $projectId): Response
+    {
+        $this->pathParameters['project_id'] = $projectId;
+        $request = new ArchiveProjectRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $projectId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postUnarchiveProject(int $projectId): Response
+    {
+        $this->pathParameters['project_id'] = $projectId;
+        $request = new UnarchiveProjectRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param ProjectStatusesRequestQuery|null $query
+     * @return Response
+     */
+    public function getProjectStatusesList(?ProjectStatusesRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListProjectStatusRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param ProjectTypesRequestQuery|null $query
+     * @return Response
+     */
+    public function getProjectTypesList(?ProjectTypesRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListProjectTypesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
     // Projects\Timesheets
+
+    /**
+     * @param TimesheetsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getTimesheetsList(?TimesheetsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListTimesheetsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param TimesheetBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postTimesheet(TimesheetBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateTimesheetRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param TimesheetsSearchBody $body
+     * @param TimesheetsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchTimesheets(TimesheetsSearchBody $body, ?TimesheetsRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchTimesheetsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $timesheetId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getTimesheet(int $timesheetId): Response
+    {
+        $this->pathParameters['timesheet_id'] = $timesheetId;
+        $request = new ShowTimesheetRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $timesheetId
+     * @param TimesheetBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putTimesheet(int $timesheetId, TimesheetBody $body): Response
+    {
+        $this->pathParameters['timesheet_id'] = $timesheetId;
+        $this->body = $body;
+        $request = new EditTimesheetRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $timesheetId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteTimesheet(int $timesheetId): Response
+    {
+        $this->pathParameters['timesheet_id'] = $timesheetId;
+        $request = new DeleteTimesheetRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
 
     /**
      * @param TimesheetStatusRequestQuery|null $query
@@ -871,6 +1332,69 @@ class BexioConnector
     {
         $this->query = $query;
         $request = new ListTimesheetStatusRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Projects\BusinessActivities
+
+    /**
+     * @param BusinessActivitiesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getBusinessActivitiesList(?BusinessActivitiesRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListBusinessActivitiesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param BusinessActivityBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postBusinessActivity(BusinessActivityBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateBusinessActivityRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param BusinessActivitiesSearchBody $body
+     * @param BusinessActivitiesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchBusinessActivities(BusinessActivitiesSearchBody $body, ?BusinessActivitiesRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchBusinessActivitiesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Projects\CommunicationTypes
+
+    /**
+     * @param CommunicationTypesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getCommunicationTypesList(?CommunicationTypesRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListCommunicationTypesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param CommunicationTypesSearchBody $body
+     * @param CommunicationTypesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchCommunicationTypes(CommunicationTypesSearchBody $body, ?CommunicationTypesRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchCommunicationTypesRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 

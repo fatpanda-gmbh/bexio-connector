@@ -20,6 +20,12 @@ use Fatpanda\BexioConnector\Container\Other\TaskPriority;
 use Fatpanda\BexioConnector\Container\Other\TaskStatus;
 use Fatpanda\BexioConnector\Container\Other\Unit;
 use Fatpanda\BexioConnector\Container\Other\User;
+use Fatpanda\BexioConnector\Container\Projects\BusinessActivity;
+use Fatpanda\BexioConnector\Container\Projects\CommunicationType;
+use Fatpanda\BexioConnector\Container\Projects\Project;
+use Fatpanda\BexioConnector\Container\Projects\ProjectStatus;
+use Fatpanda\BexioConnector\Container\Projects\ProjectType;
+use Fatpanda\BexioConnector\Container\Projects\Timesheet;
 use Fatpanda\BexioConnector\Container\Sales\File;
 use Fatpanda\BexioConnector\Container\Sales\Invoice;
 use Fatpanda\BexioConnector\Container\Projects\TimesheetStatus;
@@ -38,6 +44,23 @@ use Fatpanda\BexioConnector\RequestBody\Contacts\Salutations\SalutationsSearchBo
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactSectors\ContactSectorsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Titles\TitlesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Titles\TitleBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Countries\CountriesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Countries\CountryBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Languages\LanguagesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Notes\NoteBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Notes\NotesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\PaymentTypes\PaymentTypesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Tasks\TaskBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Tasks\TasksSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Units\UnitBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Units\UnitsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\BusinessActivities\BusinessActivitiesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\BusinessActivities\BusinessActivityBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\CommunicationTypes\CommunicationTypesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\Projects\ProjectBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\Projects\ProjectsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
@@ -56,6 +79,12 @@ use Fatpanda\BexioConnector\RequestQuery\Other\TasksRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\TaskStatusesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\UnitsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\UsersRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\BusinessActivitiesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\CommunicationTypesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\ProjectsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\ProjectStatusesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\ProjectTypesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetStatusRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
@@ -177,99 +206,174 @@ class BexioConnectorTest extends TestCase
         $this->runRequest('deleteTitle', Success::class, [self::REQUEST_PARAM_INT]);
     }
 
-    public function testGetCompaniesList()
+    public function testProject()
     {
-        $this->runListRequest('getCompaniesList', Company::class);
+        $responseBodyClass = Project::class;
+        $query = new ProjectsRequestQuery();
+        $body = new ProjectBody();
+        $searchBody = new ProjectsSearchBody();
+
+        $this->runListRequest('getProjectsList', $responseBodyClass, [], $query);
+        $this->runRequest('postProject', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchProjects', $responseBodyClass, [$searchBody], $query);
+        $this->runRequest('getProject', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('putProject', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+
+        $successBodyClass = Success::class;
+        $this->runRequest('deleteProject', $successBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postArchiveProject', $successBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postUnarchiveProject', $successBodyClass, [self::REQUEST_PARAM_INT]);
+
+        $responseBodyClass = ProjectStatus::class;
+        $query = new ProjectStatusesRequestQuery();
+        $this->runListRequest('getProjectStatusesList', $responseBodyClass, [], $query);
+
+        $responseBodyClass = ProjectType::class;
+        $query = new ProjectTypesRequestQuery();
+        $this->runListRequest('getProjectTypesList', $responseBodyClass, [], $query);
     }
 
-    public function testGetCompany()
+    public function testTimesheet()
     {
-        $this->runRequest('getCompany', Company::class, [self::REQUEST_PARAM_INT]);
+        $responseBodyClass = Timesheet::class;
+        $query = new TimesheetsRequestQuery();
+        $body = new TimesheetBody();
+        $searchBody = new TimesheetsSearchBody();
+
+        $this->runListRequest('getTimesheetsList', $responseBodyClass, [], $query);
+        $this->runRequest('postTimesheet', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchTimesheets', $responseBodyClass, [$searchBody], $query);
+        $this->runRequest('getTimesheet', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('putTimesheet', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteTimesheet', Success::class, [self::REQUEST_PARAM_INT]);
+
+        $query = new TimesheetStatusRequestQuery();
+        $this->runListRequest('getTimesheetStatusList', TimesheetStatus::class, [], $query);
     }
 
-    public function testGetCountriesList()
+    public function testBusinessActivity()
     {
+        $responseBodyClass = BusinessActivity::class;
+        $query = new BusinessActivitiesRequestQuery();
+        $body = new BusinessActivityBody();
+        $searchBody = new BusinessActivitiesSearchBody();
+
+        $this->runListRequest('getBusinessActivitiesList', $responseBodyClass, [], $query);
+        $this->runRequest('postBusinessActivity', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchBusinessActivities', $responseBodyClass, [$searchBody], $query);
+    }
+
+    public function testCommunicationType()
+    {
+        $responseBodyClass = CommunicationType::class;
+        $query = new CommunicationTypesRequestQuery();
+        $searchBody = new CommunicationTypesSearchBody();
+
+        $this->runListRequest('getCommunicationTypesList', $responseBodyClass, [], $query);
+        $this->runListRequest('postSearchCommunicationTypes', $responseBodyClass, [$searchBody], $query);
+    }
+
+    public function testCompany()
+    {
+        $responseBodyClass = Company::class;
+
+        $this->runListRequest('getCompaniesList', $responseBodyClass);
+        $this->runRequest('getCompany', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+    }
+
+    public function testCountry()
+    {
+        $responseBodyClass = Country::class;
         $query = new CountriesRequestQuery();
-        $this->runListRequest('getCountriesList', Country::class, [], $query);
+        $body = new CountryBody();
+        $searchBody = new CountriesSearchBody();
+
+        $this->runListRequest('getCountriesList', $responseBodyClass, [], $query);
+        $this->runRequest('postCountry', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchCountries', $responseBodyClass, [$searchBody], $query);
+        $this->runRequest('getCountry', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('putCountry', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteCountry', Success::class, [self::REQUEST_PARAM_INT]);
     }
 
-    public function testGetCountry()
+    public function testLanguage()
     {
-        $this->runRequest('getCountry', Country::class, [self::REQUEST_PARAM_INT]);
-    }
-
-    public function testGetLanguagesList()
-    {
+        $responseBodyClass = Language::class;
         $query = new LanguagesRequestQuery();
-        $this->runListRequest('getLanguagesList', Language::class, [], $query);
+        $searchBody = new LanguagesSearchBody();
+
+        $this->runListRequest('getLanguagesList', $responseBodyClass, [], $query);
+        $this->runListRequest('postSearchLanguages', $responseBodyClass, [$searchBody], $query);
     }
 
-    public function testGetNotesList()
+    public function testNote()
     {
+        $responseBodyClass = Note::class;
         $query = new NotesRequestQuery();
-        $this->runListRequest('getNotesList', Note::class, [], $query);
+        $body = new NoteBody();
+        $searchBody = new NotesSearchBody();
+
+        $this->runListRequest('getNotesList', $responseBodyClass, [], $query);
+        $this->runRequest('postNote', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchNotes', $responseBodyClass, [$searchBody], $query);
+        $this->runRequest('getNote', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('putNote', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteNote', Success::class, [self::REQUEST_PARAM_INT]);
     }
 
-    public function testGetNote()
+    public function testPaymentType()
     {
-        $this->runRequest('getNote', Note::class, [self::REQUEST_PARAM_INT]);
-    }
-
-    public function testGetPaymentTypesList()
-    {
+        $responseBodyClass = PaymentType::class;
         $query = new PaymentTypesRequestQuery();
-        $this->runListRequest('getPaymentTypesList', PaymentType::class, [], $query);
+        $searchBody = new PaymentTypesSearchBody();
+
+        $this->runListRequest('getPaymentTypesList', $responseBodyClass, [], $query);
+        $this->runListRequest('postSearchPaymentTypes', $responseBodyClass, [$searchBody], $query);
     }
 
-    public function testGetTask()
+    public function testTask()
     {
-        $this->runRequest('getTask', Task::class, [self::REQUEST_PARAM_INT]);
-    }
-
-    public function testGetTasksList()
-    {
+        $responseBodyClass = Task::class;
         $query = new TasksRequestQuery();
-        $this->runListRequest('getTasksList', Task::class, [], $query);
-    }
+        $body = new TaskBody();
+        $searchBody = new TasksSearchBody();
 
-    public function testGetUnitsList()
-    {
-        $query = new UnitsRequestQuery();
-        $this->runListRequest('getUnitsList', Unit::class, [], $query);
-    }
+        $this->runListRequest('getTasksList', $responseBodyClass, [], $query);
+        $this->runRequest('postTask', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchTasks', $responseBodyClass, [$searchBody], $query);
+        $this->runRequest('getTask', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('putTask', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteTask', Success::class, [self::REQUEST_PARAM_INT]);
 
-    public function testGetTaskPrioritiesList()
-    {
         $query = new TaskPrioritiesRequestQuery();
         $this->runListRequest('getTaskPrioritiesList', TaskPriority::class, [], $query);
-    }
 
-    public function testGetTaskStatusesList()
-    {
         $query = new TaskStatusesRequestQuery();
         $this->runListRequest('getTaskStatusesList', TaskStatus::class, [], $query);
     }
 
-    public function testGetUnit()
+    public function testUnit()
     {
-        $this->runRequest('getUnit', Unit::class, [self::REQUEST_PARAM_INT]);
+        $responseBodyClass = Unit::class;
+        $query = new UnitsRequestQuery();
+        $body = new UnitBody();
+        $searchBody = new UnitsSearchBody();
+
+        $this->runListRequest('getUnitsList', $responseBodyClass, [], $query);
+        $this->runRequest('postUnit', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchUnits', $responseBodyClass, [$searchBody], $query);
+        $this->runRequest('getUnit', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('putUnit', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteUnit', Success::class, [self::REQUEST_PARAM_INT]);
     }
 
-    public function testGetUsersList()
+    public function testUser()
     {
+        $responseBodyClass = User::class;
         $query = new UsersRequestQuery();
-        $this->runListRequest('getUsersList', User::class, [], $query);
-    }
 
-    public function testGetUser()
-    {
-        $this->runRequest('getUser', User::class, [self::REQUEST_PARAM_INT]);
-    }
-
-    public function testGetTimesheetStatusList()
-    {
-        $query = new TimesheetStatusRequestQuery();
-        $this->runListRequest('getTimesheetStatusList', TimesheetStatus::class, [], $query);
+        $this->runListRequest('getUsersList', $responseBodyClass, [], $query);
+        $this->runRequest('getUser', $responseBodyClass, [self::REQUEST_PARAM_INT]);
     }
 
     public function testInvoice()
