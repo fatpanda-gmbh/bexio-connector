@@ -115,6 +115,11 @@ use Fatpanda\BexioConnector\Request\Sales\Invoices\ListInvoicesRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\SearchInvoicesRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\ShowInvoicePDFRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\ShowInvoiceRequest;
+use Fatpanda\BexioConnector\Request\Sales\ItemPositions\CreateItemPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\ItemPositions\DeleteItemPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\ItemPositions\EditItemPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\ItemPositions\ListItemPositionsRequest;
+use Fatpanda\BexioConnector\Request\Sales\ItemPositions\ShowItemPositionRequest;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactGroups\ContactGroupBody;
@@ -151,6 +156,7 @@ use Fatpanda\BexioConnector\RequestBody\Sales\Comments\CommentBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\DefaultPositions\DefaultPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\ItemPositions\ItemPositionBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactGroupsRequestQuery;
@@ -179,6 +185,7 @@ use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
 use Fatpanda\BexioConnector\Response\ErrorResponse;
 use Fatpanda\BexioConnector\Response\SuccessResponse;
 use GuzzleHttp\Client;
@@ -1658,6 +1665,88 @@ class BexioConnector
         $this->pathParameters['document_id'] = $documentId;
         $this->pathParameters['position_id'] = $positionId;
         $request = new DeleteDefaultPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Sales\ItemPositions
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param ItemPositionsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getItemPositionsList(
+        string $kbDocumentType,
+        int $documentId,
+        ?ItemPositionsRequestQuery $query = null
+    ): Response {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->query = $query;
+        $request = new ListItemPositionsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param ItemPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postItemPosition(string $kbDocumentType, int $documentId, ItemPositionBody $body = null): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->body = $body;
+        $request = new CreateItemPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getItemPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new ShowItemPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @param ItemPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putItemPosition(string $kbDocumentType, int $documentId, int $positionId, ItemPositionBody $body): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $this->body = $body;
+        $request = new EditItemPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteItemPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new DeleteItemPositionRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
