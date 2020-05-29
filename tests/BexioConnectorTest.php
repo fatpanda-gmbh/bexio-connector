@@ -33,6 +33,7 @@ use Fatpanda\BexioConnector\Container\Sales\File;
 use Fatpanda\BexioConnector\Container\Sales\Invoice;
 use Fatpanda\BexioConnector\Container\Projects\TimesheetStatus;
 use Fatpanda\BexioConnector\Container\Sales\ItemPosition;
+use Fatpanda\BexioConnector\Container\Sales\TextPosition;
 use Fatpanda\BexioConnector\Container\Success;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressesSearchBody;
@@ -70,6 +71,7 @@ use Fatpanda\BexioConnector\RequestBody\Sales\DefaultPositions\DefaultPositionBo
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\ItemPositions\ItemPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\TextPositions\TextPositionBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactGroupsRequestQuery;
@@ -99,6 +101,7 @@ use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\TextPositionsRequestQuery;
 use Fatpanda\BexioConnector\Response\ErrorResponse;
 use Fatpanda\BexioConnector\Response\SuccessResponse;
 use GuzzleHttp\Client;
@@ -479,6 +482,48 @@ class BexioConnectorTest extends TestCase
             self::REQUEST_PARAM_INT,
         ];
         $this->runRequest('deleteItemPosition', Success::class, $parameters);
+    }
+
+    public function testTextPosition()
+    {
+        $responseBodyClass = TextPosition::class;
+        $query = new TextPositionsRequestQuery();
+        $body = new TextPositionBody();
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runListRequest('getTextPositionsList', $responseBodyClass, $parameters, $query);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('postTextPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('getTextPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('putTextPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('deleteTextPosition', Success::class, $parameters);
     }
 
     public function testComment()

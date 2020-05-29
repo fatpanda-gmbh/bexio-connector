@@ -120,6 +120,11 @@ use Fatpanda\BexioConnector\Request\Sales\ItemPositions\DeleteItemPositionReques
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\EditItemPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\ListItemPositionsRequest;
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\ShowItemPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\TextPositions\CreateTextPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\TextPositions\DeleteTextPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\TextPositions\EditTextPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\TextPositions\ListTextPositionsRequest;
+use Fatpanda\BexioConnector\Request\Sales\TextPositions\ShowTextPositionRequest;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactGroups\ContactGroupBody;
@@ -157,6 +162,7 @@ use Fatpanda\BexioConnector\RequestBody\Sales\DefaultPositions\DefaultPositionBo
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\ItemPositions\ItemPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\TextPositions\TextPositionBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactGroupsRequestQuery;
@@ -186,6 +192,7 @@ use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\TextPositionsRequestQuery;
 use Fatpanda\BexioConnector\Response\ErrorResponse;
 use Fatpanda\BexioConnector\Response\SuccessResponse;
 use GuzzleHttp\Client;
@@ -1747,6 +1754,88 @@ class BexioConnector
         $this->pathParameters['document_id'] = $documentId;
         $this->pathParameters['position_id'] = $positionId;
         $request = new DeleteItemPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Sales\TextPositions
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param TextPositionsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getTextPositionsList(
+        string $kbDocumentType,
+        int $documentId,
+        ?TextPositionsRequestQuery $query = null
+    ): Response {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->query = $query;
+        $request = new ListTextPositionsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param TextPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postTextPosition(string $kbDocumentType, int $documentId, TextPositionBody $body = null): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->body = $body;
+        $request = new CreateTextPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getTextPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new ShowTextPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @param TextPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putTextPosition(string $kbDocumentType, int $documentId, int $positionId, TextPositionBody $body): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $this->body = $body;
+        $request = new EditTextPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteTextPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new DeleteTextPositionRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
