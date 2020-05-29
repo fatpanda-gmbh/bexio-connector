@@ -28,6 +28,7 @@ use Fatpanda\BexioConnector\Container\Projects\ProjectStatus;
 use Fatpanda\BexioConnector\Container\Projects\ProjectType;
 use Fatpanda\BexioConnector\Container\Projects\Timesheet;
 use Fatpanda\BexioConnector\Container\Sales\Comment;
+use Fatpanda\BexioConnector\Container\Sales\DefaultPosition;
 use Fatpanda\BexioConnector\Container\Sales\File;
 use Fatpanda\BexioConnector\Container\Sales\Invoice;
 use Fatpanda\BexioConnector\Container\Projects\TimesheetStatus;
@@ -64,6 +65,7 @@ use Fatpanda\BexioConnector\RequestBody\Projects\Projects\ProjectsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Comments\CommentBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\DefaultPositions\DefaultPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
@@ -92,6 +94,7 @@ use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetStatusRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\Response\ErrorResponse;
 use Fatpanda\BexioConnector\Response\SuccessResponse;
@@ -389,6 +392,48 @@ class BexioConnectorTest extends TestCase
 
         $this->runListRequest('getUsersList', $responseBodyClass, [], $query);
         $this->runRequest('getUser', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+    }
+
+    public function testDefaultPosition()
+    {
+        $responseBodyClass = DefaultPosition::class;
+        $query = new DefaultPositionsRequestQuery();
+        $body = new DefaultPositionBody();
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runListRequest('getDefaultPositionsList', $responseBodyClass, $parameters, $query);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('postDefaultPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('getDefaultPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('putDefaultPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('deleteDefaultPosition', Success::class, $parameters);
     }
 
     public function testComment()

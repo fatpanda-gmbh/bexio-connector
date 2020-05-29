@@ -103,6 +103,11 @@ use Fatpanda\BexioConnector\Request\Projects\Timesheets\ShowTimesheetRequest;
 use Fatpanda\BexioConnector\Request\Sales\Comments\CreateCommentRequest;
 use Fatpanda\BexioConnector\Request\Sales\Comments\ListCommentsRequest;
 use Fatpanda\BexioConnector\Request\Sales\Comments\ShowCommentRequest;
+use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\CreateDefaultPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\DeleteDefaultPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\EditDefaultPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\ListDefaultPositionsRequest;
+use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\ShowDefaultPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\CreateInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\DeleteInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\EditInvoiceRequest;
@@ -143,6 +148,7 @@ use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\RequestBodyInterface;
 use Fatpanda\BexioConnector\RequestBody\Sales\Comments\CommentBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\DefaultPositions\DefaultPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
@@ -171,6 +177,7 @@ use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetStatusRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\Response\ErrorResponse;
 use Fatpanda\BexioConnector\Response\SuccessResponse;
@@ -1570,6 +1577,88 @@ class BexioConnector
     public function getOrderComment(int $documentId, int $commentId): Response
     {
         return $this->getComment(ShowCommentRequest::DOCUMENT_TYPE_ORDER, $documentId, $commentId);
+    }
+
+    // Sales\DefaultPositions
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param DefaultPositionsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getDefaultPositionsList(
+        string $kbDocumentType,
+        int $documentId,
+        ?DefaultPositionsRequestQuery $query = null
+    ): Response {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->query = $query;
+        $request = new ListDefaultPositionsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param DefaultPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postDefaultPosition(string $kbDocumentType, int $documentId, DefaultPositionBody $body = null): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->body = $body;
+        $request = new CreateDefaultPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getDefaultPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new ShowDefaultPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @param DefaultPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putDefaultPosition(string $kbDocumentType, int $documentId, int $positionId, DefaultPositionBody $body): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $this->body = $body;
+        $request = new EditDefaultPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteDefaultPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new DeleteDefaultPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
     }
 
     // Sales\Invoices
