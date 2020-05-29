@@ -27,6 +27,7 @@ use Fatpanda\BexioConnector\Container\Projects\Project;
 use Fatpanda\BexioConnector\Container\Projects\ProjectStatus;
 use Fatpanda\BexioConnector\Container\Projects\ProjectType;
 use Fatpanda\BexioConnector\Container\Projects\Timesheet;
+use Fatpanda\BexioConnector\Container\Sales\Comment;
 use Fatpanda\BexioConnector\Container\Sales\File;
 use Fatpanda\BexioConnector\Container\Sales\Invoice;
 use Fatpanda\BexioConnector\Container\Projects\TimesheetStatus;
@@ -62,6 +63,7 @@ use Fatpanda\BexioConnector\RequestBody\Projects\Projects\ProjectBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Projects\ProjectsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Comments\CommentBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
@@ -89,6 +91,7 @@ use Fatpanda\BexioConnector\RequestQuery\Projects\ProjectTypesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetStatusRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
+use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\Response\ErrorResponse;
 use Fatpanda\BexioConnector\Response\SuccessResponse;
@@ -103,6 +106,7 @@ use PHPUnit\Framework\TestCase;
 class BexioConnectorTest extends TestCase
 {
     protected const REQUEST_PARAM_INT = 1;
+    protected const REQUEST_PARAM_STRING = 'string';
     protected const RESPONSE_STATUS = 200;
     protected const ERROR_MESSAGE = 'Error message';
 
@@ -385,6 +389,49 @@ class BexioConnectorTest extends TestCase
 
         $this->runListRequest('getUsersList', $responseBodyClass, [], $query);
         $this->runRequest('getUser', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+    }
+
+    public function testComment()
+    {
+        $responseBodyClass = Comment::class;
+        $query = new CommentsRequestQuery();
+        $body = new CommentBody();
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runListRequest('getCommentsList', $responseBodyClass, $parameters, $query);
+
+        $this->runListRequest('getOfferCommentsList', $responseBodyClass, [self::REQUEST_PARAM_INT], $query);
+        $this->runListRequest('getOrderCommentsList', $responseBodyClass, [self::REQUEST_PARAM_INT], $query);
+        $this->runListRequest('getInvoiceCommentsList', $responseBodyClass, [self::REQUEST_PARAM_INT], $query);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('postComment', $responseBodyClass, $parameters);
+
+        $this->runRequest('postOfferComment', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('postOrderComment', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('postInvoiceComment', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('getComment', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('getOfferComment', $responseBodyClass, $parameters);
+        $this->runRequest('getInvoiceComment', $responseBodyClass, $parameters);
+        $this->runRequest('getOrderComment', $responseBodyClass, $parameters);
     }
 
     public function testInvoice()

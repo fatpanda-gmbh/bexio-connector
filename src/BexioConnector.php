@@ -100,6 +100,9 @@ use Fatpanda\BexioConnector\Request\Projects\Timesheets\ListTimesheetsRequest;
 use Fatpanda\BexioConnector\Request\Projects\Timesheets\ListTimesheetStatusRequest;
 use Fatpanda\BexioConnector\Request\Projects\Timesheets\SearchTimesheetsRequest;
 use Fatpanda\BexioConnector\Request\Projects\Timesheets\ShowTimesheetRequest;
+use Fatpanda\BexioConnector\Request\Sales\Comments\CreateCommentRequest;
+use Fatpanda\BexioConnector\Request\Sales\Comments\ListCommentsRequest;
+use Fatpanda\BexioConnector\Request\Sales\Comments\ShowCommentRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\CreateInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\DeleteInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\EditInvoiceRequest;
@@ -139,6 +142,7 @@ use Fatpanda\BexioConnector\RequestBody\Projects\Projects\ProjectsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\RequestBodyInterface;
+use Fatpanda\BexioConnector\RequestBody\Sales\Comments\CommentBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
@@ -166,6 +170,7 @@ use Fatpanda\BexioConnector\RequestQuery\Projects\ProjectTypesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetStatusRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
+use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\Response\ErrorResponse;
 use Fatpanda\BexioConnector\Response\SuccessResponse;
@@ -1427,6 +1432,146 @@ class BexioConnector
     }
 
     // Sales
+    // Sales\Comments
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param CommentsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getCommentsList(
+        string $kbDocumentType,
+        int $documentId,
+        ?CommentsRequestQuery $query = null
+    ): Response {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->query = $query;
+        $request = new ListCommentsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $documentId
+     * @param CommentsRequestQuery|null $query
+     * @return Response
+     */
+    public function getOfferCommentsList(int $documentId, ?CommentsRequestQuery $query = null): Response
+    {
+        return $this->getCommentsList(ListCommentsRequest::DOCUMENT_TYPE_OFFER, $documentId, $query);
+    }
+
+    /**
+     * @param int $documentId
+     * @param CommentsRequestQuery|null $query
+     * @return Response
+     */
+    public function getOrderCommentsList(int $documentId, ?CommentsRequestQuery $query = null): Response
+    {
+        return $this->getCommentsList(ListCommentsRequest::DOCUMENT_TYPE_ORDER, $documentId, $query);
+    }
+
+    /**
+     * @param int $documentId
+     * @param CommentsRequestQuery|null $query
+     * @return Response
+     */
+    public function getInvoiceCommentsList(int $documentId, ?CommentsRequestQuery $query = null): Response
+    {
+        return $this->getCommentsList(ListCommentsRequest::DOCUMENT_TYPE_INVOICE, $documentId, $query);
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param CommentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postComment(string $kbDocumentType, int $documentId, CommentBody $body = null): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->body = $body;
+        $request = new CreateCommentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $documentId
+     * @param CommentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postOfferComment(int $documentId, CommentBody $body = null): Response
+    {
+        return $this->postComment(CreateCommentRequest::DOCUMENT_TYPE_OFFER, $documentId, $body);
+    }
+
+    /**
+     * @param int $documentId
+     * @param CommentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postOrderComment(int $documentId, CommentBody $body = null): Response
+    {
+        return $this->postComment(CreateCommentRequest::DOCUMENT_TYPE_ORDER, $documentId, $body);
+    }
+
+    /**
+     * @param int $documentId
+     * @param CommentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postInvoiceComment(int $documentId, CommentBody $body = null): Response
+    {
+        return $this->postComment(CreateCommentRequest::DOCUMENT_TYPE_INVOICE, $documentId, $body);
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $commentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getComment(string $kbDocumentType, int $documentId, int $commentId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['comment_id'] = $commentId;
+        $request = new ShowCommentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $documentId
+     * @param int $commentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getOfferComment(int $documentId, int $commentId): Response
+    {
+        return $this->getComment(ShowCommentRequest::DOCUMENT_TYPE_OFFER, $documentId, $commentId);
+    }
+
+    /**
+     * @param int $documentId
+     * @param int $commentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getInvoiceComment(int $documentId, int $commentId): Response
+    {
+        return $this->getComment(ShowCommentRequest::DOCUMENT_TYPE_INVOICE, $documentId, $commentId);
+    }
+
+    /**
+     * @param int $documentId
+     * @param int $commentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getOrderComment(int $documentId, int $commentId): Response
+    {
+        return $this->getComment(ShowCommentRequest::DOCUMENT_TYPE_ORDER, $documentId, $commentId);
+    }
+
     // Sales\Invoices
 
     /**
