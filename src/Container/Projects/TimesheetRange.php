@@ -19,14 +19,14 @@ class TimesheetRange implements ContainerInterface
     /**
      * @var DateTime
      * @SerializedName("start")
-     * @Type("DateTime<'Y-m-d H:m:i'>")
+     * @Type("DateTime<'Y-m-d H:i:s'>")
      */
     protected $start;
 
     /**
      * @var DateTime
      * @SerializedName("end")
-     * @Type("DateTime<'Y-m-d H:m:i'>")
+     * @Type("DateTime<'Y-m-d H:i:s'>")
      */
     protected $end;
 

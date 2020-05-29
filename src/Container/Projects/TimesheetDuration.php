@@ -19,7 +19,7 @@ class TimesheetDuration implements ContainerInterface
     /**
      * @var DateTime
      * @SerializedName("date")
-     * @Type("DateTime<'Y-m-d H:m:i'>")
+     * @Type("DateTime<'Y-m-d H:i:s'>")
      */
     protected $date;
 

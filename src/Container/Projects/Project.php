@@ -33,14 +33,14 @@ class Project implements ContainerInterface
     /**
      * @var DateTime
      * @SerializedName("start_date")
-     * @Type("DateTime<'Y-m-d H:m:i'>")
+     * @Type("DateTime<'Y-m-d H:i:s'>")
      */
     protected $startDate;
 
     /**
      * @var DateTime
      * @SerializedName("end_date")
-     * @Type("DateTime<'Y-m-d H:m:i'>")
+     * @Type("DateTime<'Y-m-d H:i:s'>")
      */
     protected $endDate;
 

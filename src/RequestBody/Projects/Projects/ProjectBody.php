@@ -19,14 +19,14 @@ class ProjectBody extends AbstractBody
     /**
      * @var DateTime|null
      * @SerializedName("start_date")
-     * @Type("DateTime<'Y-m-d H:m:i'>")
+     * @Type("DateTime<'Y-m-d H:i:s'>")
      */
     protected $startDate;
 
     /**
      * @var DateTime|null
      * @SerializedName("end_date")
-     * @Type("DateTime<'Y-m-d H:m:i'>")
+     * @Type("DateTime<'Y-m-d H:i:s'>")
      */
     protected $endDate;
 
