@@ -3,6 +3,7 @@
 namespace Fatpanda\BexioConnector\Tests;
 
 use Fatpanda\BexioConnector\BexioConnector;
+use Fatpanda\BexioConnector\Container\Banking\BankAccount;
 use Fatpanda\BexioConnector\Container\Contacts\AdditionalAddress;
 use Fatpanda\BexioConnector\Container\Contacts\Contact;
 use Fatpanda\BexioConnector\Container\Contacts\ContactGroup;
@@ -63,6 +64,7 @@ use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
+use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactGroupsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactRelationsRequestQuery;
@@ -103,6 +105,15 @@ class BexioConnectorTest extends TestCase
     protected const REQUEST_PARAM_INT = 1;
     protected const RESPONSE_STATUS = 200;
     protected const ERROR_MESSAGE = 'Error message';
+
+    public function testBankAccount()
+    {
+        $responseBodyClass = BankAccount::class;
+        $query = new BankAccountsRequestQuery();
+
+        $this->runListRequest('getBankAccountsList', $responseBodyClass, [], $query);
+        $this->runRequest('getBankAccount', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+    }
 
     public function testAdditionalAddress()
     {

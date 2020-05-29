@@ -3,6 +3,8 @@
 namespace Fatpanda\BexioConnector;
 
 use Fatpanda\BexioConnector\Message\Response;
+use Fatpanda\BexioConnector\Request\Banking\BankAccounts\ListBankAccountsRequest;
+use Fatpanda\BexioConnector\Request\Banking\BankAccounts\ShowBankAccountRequest;
 use Fatpanda\BexioConnector\Request\Contacts\AdditionalAddresses\CreateAdditionalAddressRequest;
 use Fatpanda\BexioConnector\Request\Contacts\AdditionalAddresses\DeleteAdditionalAddressRequest;
 use Fatpanda\BexioConnector\Request\Contacts\AdditionalAddresses\EditAdditionalAddressRequest;
@@ -139,6 +141,7 @@ use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody
 use Fatpanda\BexioConnector\RequestBody\RequestBodyInterface;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
+use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactGroupsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactRelationsRequestQuery;
@@ -239,6 +242,31 @@ class BexioConnector
     public function setClient(ClientInterface $client): void
     {
         $this->client = $client;
+    }
+
+    // Banking
+    // Banking\BankAccounts
+
+    /**
+     * @param BankAccountsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getBankAccountsList(?BankAccountsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListBankAccountsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $bankAccountId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getBankAccount(int $bankAccountId): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $request = new ShowBankAccountRequest(...$this->getRequestParameters());
+        return $request->execute();
     }
 
     // Contacts
