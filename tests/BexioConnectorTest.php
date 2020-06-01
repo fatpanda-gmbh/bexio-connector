@@ -30,6 +30,7 @@ use Fatpanda\BexioConnector\Container\Projects\Timesheet;
 use Fatpanda\BexioConnector\Container\Sales\Comment;
 use Fatpanda\BexioConnector\Container\Sales\DefaultPosition;
 use Fatpanda\BexioConnector\Container\Sales\DiscountPosition;
+use Fatpanda\BexioConnector\Container\Sales\DocumentSetting;
 use Fatpanda\BexioConnector\Container\Sales\File;
 use Fatpanda\BexioConnector\Container\Sales\Invoice;
 use Fatpanda\BexioConnector\Container\Projects\TimesheetStatus;
@@ -108,6 +109,7 @@ use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DiscountPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\DocumentSettingsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\PagebreakPositionsRequestQuery;
@@ -704,6 +706,14 @@ class BexioConnectorTest extends TestCase
             self::REQUEST_PARAM_INT,
         ];
         $this->runRequest('deleteSubpositionPosition', Success::class, $parameters);
+    }
+
+    public function testDocumentSetting()
+    {
+        $responseBodyClass = DocumentSetting::class;
+        $query = new DocumentSettingsRequestQuery();
+
+        $this->runListRequest('getDocumentSettingsList', $responseBodyClass, [], $query);
     }
 
     public function testComment()

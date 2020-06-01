@@ -113,6 +113,7 @@ use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\DeleteDiscountPositi
 use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\EditDiscountPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\ListDiscountPositionsRequest;
 use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\ShowDiscountPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\DocumentSettings\ListDocumentSettingsRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\CreateInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\DeleteInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\EditInvoiceRequest;
@@ -215,6 +216,7 @@ use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DiscountPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\DocumentSettingsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\PagebreakPositionsRequestQuery;
@@ -1481,6 +1483,20 @@ class BexioConnector
     }
 
     // Sales
+    // Sales\DocumentSettings
+
+    /**
+     * @param DocumentSettingsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getDocumentSettingsList(
+        ?DocumentSettingsRequestQuery $query = null
+    ): Response {
+        $this->query = $query;
+        $request = new ListDocumentSettingsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
     // Sales\Comments
 
     /**
