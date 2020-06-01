@@ -29,6 +29,7 @@ use Fatpanda\BexioConnector\Container\Projects\ProjectType;
 use Fatpanda\BexioConnector\Container\Projects\Timesheet;
 use Fatpanda\BexioConnector\Container\Sales\Comment;
 use Fatpanda\BexioConnector\Container\Sales\DefaultPosition;
+use Fatpanda\BexioConnector\Container\Sales\Delivery;
 use Fatpanda\BexioConnector\Container\Sales\DiscountPosition;
 use Fatpanda\BexioConnector\Container\Sales\DocumentSetting;
 use Fatpanda\BexioConnector\Container\Sales\File;
@@ -108,6 +109,7 @@ use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetStatusRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\DeliveriesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DiscountPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DocumentSettingsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
@@ -757,6 +759,16 @@ class BexioConnectorTest extends TestCase
         $this->runRequest('getOfferComment', $responseBodyClass, $parameters);
         $this->runRequest('getInvoiceComment', $responseBodyClass, $parameters);
         $this->runRequest('getOrderComment', $responseBodyClass, $parameters);
+    }
+
+    public function testDelivery()
+    {
+        $responseBodyClass = Delivery::class;
+        $query = new DeliveriesRequestQuery();
+
+        $this->runListRequest('getDeliveriesList', $responseBodyClass, [], $query);
+        $this->runRequest('getDelivery', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postIssueDelivery', Success::class, [self::REQUEST_PARAM_INT]);
     }
 
     public function testInvoice()

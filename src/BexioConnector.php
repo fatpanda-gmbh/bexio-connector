@@ -108,6 +108,9 @@ use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\DeleteDefaultPosition
 use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\EditDefaultPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\ListDefaultPositionsRequest;
 use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\ShowDefaultPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\Deliveries\IssueDeliveryRequest;
+use Fatpanda\BexioConnector\Request\Sales\Deliveries\ListDeliveriesRequest;
+use Fatpanda\BexioConnector\Request\Sales\Deliveries\ShowDeliveryRequest;
 use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\CreateDiscountPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\DeleteDiscountPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\EditDiscountPositionRequest;
@@ -215,6 +218,7 @@ use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetStatusRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\DeliveriesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DiscountPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DocumentSettingsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
@@ -2208,6 +2212,41 @@ class BexioConnector
         $this->pathParameters['document_id'] = $documentId;
         $this->pathParameters['position_id'] = $positionId;
         $request = new DeleteSubpositionPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Sales\Deliveries
+
+    /**
+     * @param DeliveriesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getDeliveriesList(?DeliveriesRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListDeliveriesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $deliveryId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getDelivery(int $deliveryId): Response
+    {
+        $this->pathParameters['delivery_id'] = $deliveryId;
+        $request = new ShowDeliveryRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $deliveryId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postIssueDelivery(int $deliveryId): Response
+    {
+        $this->pathParameters['delivery_id'] = $deliveryId;
+        $request = new IssueDeliveryRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
