@@ -29,10 +29,14 @@ use Fatpanda\BexioConnector\Container\Projects\ProjectType;
 use Fatpanda\BexioConnector\Container\Projects\Timesheet;
 use Fatpanda\BexioConnector\Container\Sales\Comment;
 use Fatpanda\BexioConnector\Container\Sales\DefaultPosition;
+use Fatpanda\BexioConnector\Container\Sales\DiscountPosition;
 use Fatpanda\BexioConnector\Container\Sales\File;
 use Fatpanda\BexioConnector\Container\Sales\Invoice;
 use Fatpanda\BexioConnector\Container\Projects\TimesheetStatus;
 use Fatpanda\BexioConnector\Container\Sales\ItemPosition;
+use Fatpanda\BexioConnector\Container\Sales\PagebreakPosition;
+use Fatpanda\BexioConnector\Container\Sales\SubpositionPosition;
+use Fatpanda\BexioConnector\Container\Sales\SubtotalPosition;
 use Fatpanda\BexioConnector\Container\Sales\TextPosition;
 use Fatpanda\BexioConnector\Container\Success;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressBody;
@@ -68,9 +72,13 @@ use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Comments\CommentBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\DefaultPositions\DefaultPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\DiscountPositions\DiscountPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\ItemPositions\ItemPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\PagebreakPositions\PagebreakPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\SubtotalPositions\SubtotalPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\TextPositions\TextPositionBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
@@ -99,8 +107,12 @@ use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetStatusRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\DiscountPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\PagebreakPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\SubpositionPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\SubtotalPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\TextPositionsRequestQuery;
 use Fatpanda\BexioConnector\Response\ErrorResponse;
 use Fatpanda\BexioConnector\Response\SuccessResponse;
@@ -524,6 +536,174 @@ class BexioConnectorTest extends TestCase
             self::REQUEST_PARAM_INT,
         ];
         $this->runRequest('deleteTextPosition', Success::class, $parameters);
+    }
+
+    public function testSubtotalPosition()
+    {
+        $responseBodyClass = SubtotalPosition::class;
+        $query = new SubtotalPositionsRequestQuery();
+        $body = new SubtotalPositionBody();
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runListRequest('getSubtotalPositionsList', $responseBodyClass, $parameters, $query);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('postSubtotalPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('getSubtotalPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('putSubtotalPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('deleteSubtotalPosition', Success::class, $parameters);
+    }
+
+    public function testDiscountPosition()
+    {
+        $responseBodyClass = DiscountPosition::class;
+        $query = new DiscountPositionsRequestQuery();
+        $body = new DiscountPositionBody();
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runListRequest('getDiscountPositionsList', $responseBodyClass, $parameters, $query);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('postDiscountPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('getDiscountPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('putDiscountPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('deleteDiscountPosition', Success::class, $parameters);
+    }
+
+    public function testPagebreakPosition()
+    {
+        $responseBodyClass = PagebreakPosition::class;
+        $query = new PagebreakPositionsRequestQuery();
+        $body = new PagebreakPositionBody();
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runListRequest('getPagebreakPositionsList', $responseBodyClass, $parameters, $query);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('postPagebreakPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('getPagebreakPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('putPagebreakPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('deletePagebreakPosition', Success::class, $parameters);
+    }
+
+    public function testSubpositionPosition()
+    {
+        $responseBodyClass = SubpositionPosition::class;
+        $query = new SubpositionPositionsRequestQuery();
+        $body = new SubpositionPositionBody();
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runListRequest('getSubpositionPositionsList', $responseBodyClass, $parameters, $query);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('postSubpositionPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('getSubpositionPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+            $body,
+        ];
+        $this->runRequest('putSubpositionPosition', $responseBodyClass, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_STRING,
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('deleteSubpositionPosition', Success::class, $parameters);
     }
 
     public function testComment()

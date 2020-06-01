@@ -108,6 +108,11 @@ use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\DeleteDefaultPosition
 use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\EditDefaultPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\ListDefaultPositionsRequest;
 use Fatpanda\BexioConnector\Request\Sales\DefaultPositions\ShowDefaultPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\CreateDiscountPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\DeleteDiscountPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\EditDiscountPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\ListDiscountPositionsRequest;
+use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\ShowDiscountPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\CreateInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\DeleteInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\EditInvoiceRequest;
@@ -120,6 +125,21 @@ use Fatpanda\BexioConnector\Request\Sales\ItemPositions\DeleteItemPositionReques
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\EditItemPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\ListItemPositionsRequest;
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\ShowItemPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\CreatePagebreakPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\DeletePagebreakPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\EditPagebreakPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\ListPagebreakPositionsRequest;
+use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\ShowPagebreakPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\SubpositionPositions\CreateSubpositionPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\SubpositionPositions\DeleteSubpositionPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\SubpositionPositions\EditSubpositionPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\SubpositionPositions\ListSubpositionPositionsRequest;
+use Fatpanda\BexioConnector\Request\Sales\SubpositionPositions\ShowSubpositionPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\SubtotalPositions\CreateSubtotalPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\SubtotalPositions\DeleteSubtotalPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\SubtotalPositions\EditSubtotalPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\SubtotalPositions\ListSubtotalPositionsRequest;
+use Fatpanda\BexioConnector\Request\Sales\SubtotalPositions\ShowSubtotalPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\TextPositions\CreateTextPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\TextPositions\DeleteTextPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\TextPositions\EditTextPositionRequest;
@@ -159,9 +179,13 @@ use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody
 use Fatpanda\BexioConnector\RequestBody\RequestBodyInterface;
 use Fatpanda\BexioConnector\RequestBody\Sales\Comments\CommentBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\DefaultPositions\DefaultPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\DiscountPositions\DiscountPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\ItemPositions\ItemPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\PagebreakPositions\PagebreakPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\SubtotalPositions\SubtotalPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\TextPositions\TextPositionBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
@@ -190,8 +214,12 @@ use Fatpanda\BexioConnector\RequestQuery\Projects\TimesheetStatusRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 use Fatpanda\BexioConnector\RequestQuery\Sales\CommentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\DiscountPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\PagebreakPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\SubpositionPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\SubtotalPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\TextPositionsRequestQuery;
 use Fatpanda\BexioConnector\Response\ErrorResponse;
 use Fatpanda\BexioConnector\Response\SuccessResponse;
@@ -1836,6 +1864,334 @@ class BexioConnector
         $this->pathParameters['document_id'] = $documentId;
         $this->pathParameters['position_id'] = $positionId;
         $request = new DeleteTextPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Sales\SubtotalPositions
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param SubtotalPositionsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getSubtotalPositionsList(
+        string $kbDocumentType,
+        int $documentId,
+        ?SubtotalPositionsRequestQuery $query = null
+    ): Response {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->query = $query;
+        $request = new ListSubtotalPositionsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param SubtotalPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSubtotalPosition(string $kbDocumentType, int $documentId, SubtotalPositionBody $body = null): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->body = $body;
+        $request = new CreateSubtotalPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getSubtotalPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new ShowSubtotalPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @param SubtotalPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putSubtotalPosition(string $kbDocumentType, int $documentId, int $positionId, SubtotalPositionBody $body): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $this->body = $body;
+        $request = new EditSubtotalPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteSubtotalPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new DeleteSubtotalPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Sales\DiscountPositions
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param DiscountPositionsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getDiscountPositionsList(
+        string $kbDocumentType,
+        int $documentId,
+        ?DiscountPositionsRequestQuery $query = null
+    ): Response {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->query = $query;
+        $request = new ListDiscountPositionsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param DiscountPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postDiscountPosition(string $kbDocumentType, int $documentId, DiscountPositionBody $body = null): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->body = $body;
+        $request = new CreateDiscountPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getDiscountPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new ShowDiscountPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @param DiscountPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putDiscountPosition(string $kbDocumentType, int $documentId, int $positionId, DiscountPositionBody $body): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $this->body = $body;
+        $request = new EditDiscountPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteDiscountPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new DeleteDiscountPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Sales\PagebreakPositions
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param PagebreakPositionsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getPagebreakPositionsList(
+        string $kbDocumentType,
+        int $documentId,
+        ?PagebreakPositionsRequestQuery $query = null
+    ): Response {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->query = $query;
+        $request = new ListPagebreakPositionsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param PagebreakPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postPagebreakPosition(string $kbDocumentType, int $documentId, PagebreakPositionBody $body = null): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->body = $body;
+        $request = new CreatePagebreakPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getPagebreakPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new ShowPagebreakPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @param PagebreakPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putPagebreakPosition(string $kbDocumentType, int $documentId, int $positionId, PagebreakPositionBody $body): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $this->body = $body;
+        $request = new EditPagebreakPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deletePagebreakPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new DeletePagebreakPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Sales\SubpositionPositions
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param SubpositionPositionsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getSubpositionPositionsList(
+        string $kbDocumentType,
+        int $documentId,
+        ?SubpositionPositionsRequestQuery $query = null
+    ): Response {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->query = $query;
+        $request = new ListSubpositionPositionsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param SubpositionPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSubpositionPosition(string $kbDocumentType, int $documentId, SubpositionPositionBody $body = null): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->body = $body;
+        $request = new CreateSubpositionPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getSubpositionPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new ShowSubpositionPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @param SubpositionPositionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putSubpositionPosition(string $kbDocumentType, int $documentId, int $positionId, SubpositionPositionBody $body): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $this->body = $body;
+        $request = new EditSubpositionPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param string $kbDocumentType
+     * @param int $documentId
+     * @param int $positionId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteSubpositionPosition(string $kbDocumentType, int $documentId, int $positionId): Response
+    {
+        $this->pathParameters['kb_document_type'] = $kbDocumentType;
+        $this->pathParameters['document_id'] = $documentId;
+        $this->pathParameters['position_id'] = $positionId;
+        $request = new DeleteSubpositionPositionRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
