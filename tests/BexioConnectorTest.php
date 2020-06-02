@@ -38,6 +38,8 @@ use Fatpanda\BexioConnector\Container\Projects\TimesheetStatus;
 use Fatpanda\BexioConnector\Container\Sales\InvoicePayment;
 use Fatpanda\BexioConnector\Container\Sales\InvoiceReminder;
 use Fatpanda\BexioConnector\Container\Sales\ItemPosition;
+use Fatpanda\BexioConnector\Container\Sales\Order;
+use Fatpanda\BexioConnector\Container\Sales\OrderRepetition;
 use Fatpanda\BexioConnector\Container\Sales\PagebreakPosition;
 use Fatpanda\BexioConnector\Container\Sales\SubpositionPosition;
 use Fatpanda\BexioConnector\Container\Sales\SubtotalPosition;
@@ -50,7 +52,7 @@ use Fatpanda\BexioConnector\RequestBody\Contacts\ContactGroups\ContactGroupsSear
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactRelations\ContactRelationBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactRelations\ContactRelationsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Contacts\ContactBody;
-use Fatpanda\BexioConnector\RequestBody\Contacts\Contacts\ContactBulkBody;
+use Fatpanda\BexioConnector\RequestBody\Contacts\Contacts\ContactArrayBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Contacts\ContactsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Salutations\SalutationBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Salutations\SalutationsSearchBody;
@@ -85,6 +87,10 @@ use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\SendInvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\SendInvoiceReminderBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\ItemPositions\ItemPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrderBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrderRepetitionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrdersSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Orders\PositionsArrayBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\PagebreakPositions\PagebreakPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubtotalPositions\SubtotalPositionBody;
@@ -122,6 +128,7 @@ use Fatpanda\BexioConnector\RequestQuery\Sales\DocumentSettingsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicePaymentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\OrdersRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\PagebreakPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\SubpositionPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\SubtotalPositionsRequestQuery;
@@ -212,8 +219,10 @@ class BexioConnectorTest extends TestCase
         $responseBodyClass = Contact::class;
         $query = new ContactsRequestQuery();
         $body = new ContactBody();
-        $bulkBody = new ContactBulkBody();
         $searchBody = new ContactsSearchBody();
+        $arrayBody = new ContactArrayBody();
+        $item = $arrayBody->createItem();
+        $item->setContactTypeId($item::CONTACT_TYPE_COMPANY);
 
         $this->runListRequest('getContactsList', $responseBodyClass, [], $query);
         $this->runRequest('postContact', $responseBodyClass, [$body]);
@@ -221,7 +230,7 @@ class BexioConnectorTest extends TestCase
         $this->runRequest('getContact', $responseBodyClass, [self::REQUEST_PARAM_INT]);
         $this->runRequest('putContact', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
         $this->runRequest('deleteContact', Success::class, [self::REQUEST_PARAM_INT]);
-        $this->runListRequest('postContactsBulk', $responseBodyClass, [$bulkBody]);
+        $this->runListRequest('postContactsBulk', $responseBodyClass, [$arrayBody]);
     }
 
     public function testSalutation()
@@ -767,6 +776,38 @@ class BexioConnectorTest extends TestCase
         $this->runRequest('getOfferComment', $responseBodyClass, $parameters);
         $this->runRequest('getInvoiceComment', $responseBodyClass, $parameters);
         $this->runRequest('getOrderComment', $responseBodyClass, $parameters);
+    }
+
+    public function testOrder()
+    {
+        $responseBodyClass = Order::class;
+        $responseBodySuccessClass = Success::class;
+        $query = new OrdersRequestQuery();
+        $body = new OrderBody();
+        $searchBody = new OrdersSearchBody();
+
+        $this->runListRequest('getOrdersList', $responseBodyClass, [], $query);
+        $this->runRequest('postOrder', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchOrders', $responseBodyClass, [$searchBody], $query);
+        $this->runRequest('getOrder', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('getOrderPdf', File::class, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('putOrder', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteOrder', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+
+        $body = new PositionsArrayBody();
+        $item = $body->createItem();
+        $item->setId(self::REQUEST_PARAM_INT)
+            ->setAmount(self::REQUEST_PARAM_INT)
+            ->setType($item::POSITION_TYPE_ARTICLE)
+        ;
+        $this->runRequest('postCreateDeliveryFromOrder', Delivery::class, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('postCreateInvoiceFromOrder', Invoice::class, [self::REQUEST_PARAM_INT, $body]);
+
+        $responseBodyClass = OrderRepetition::class;
+        $body = new OrderRepetitionBody();
+        $this->runRequest('getOrderRepetition', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postOrderRepetition', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteOrderRepetition', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
     }
 
     public function testDelivery()

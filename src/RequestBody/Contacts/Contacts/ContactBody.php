@@ -4,11 +4,15 @@ namespace Fatpanda\BexioConnector\RequestBody\Contacts\Contacts;
 
 use DateTime;
 use Fatpanda\BexioConnector\RequestBody\AbstractBody;
+use Fatpanda\BexioConnector\RequestBody\RequestBodyItemInterface;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
 
-class ContactBody extends AbstractBody
+class ContactBody extends AbstractBody implements RequestBodyItemInterface
 {
+    public const CONTACT_TYPE_COMPANY = 1;
+    public const CONTACT_TYPE_PERSON = 2;
+
     /**
      * @var int
      * @SerializedName("contact_type_id")

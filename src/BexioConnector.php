@@ -148,6 +148,18 @@ use Fatpanda\BexioConnector\Request\Sales\ItemPositions\DeleteItemPositionReques
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\EditItemPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\ListItemPositionsRequest;
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\ShowItemPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\CreateDeliveryFromOrderRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\CreateInvoiceFromOrderRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\CreateOrderRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\DeleteOrderRepetitionRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\DeleteOrderRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\EditOrderRepetitionRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\EditOrderRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\ListOrdersRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\SearchOrdersRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\ShowOrderPDFRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\ShowOrderRepetitionRequest;
+use Fatpanda\BexioConnector\Request\Sales\Orders\ShowOrderRequest;
 use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\CreatePagebreakPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\DeletePagebreakPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\EditPagebreakPositionRequest;
@@ -175,7 +187,7 @@ use Fatpanda\BexioConnector\RequestBody\Contacts\ContactGroups\ContactGroupsSear
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactRelations\ContactRelationBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactRelations\ContactRelationsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Contacts\ContactBody;
-use Fatpanda\BexioConnector\RequestBody\Contacts\Contacts\ContactBulkBody;
+use Fatpanda\BexioConnector\RequestBody\Contacts\Contacts\ContactArrayBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Contacts\ContactsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Salutations\SalutationBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Salutations\SalutationsSearchBody;
@@ -211,6 +223,10 @@ use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\SendInvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\SendInvoiceReminderBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\ItemPositions\ItemPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrderBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrderRepetitionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrdersSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Orders\PositionsArrayBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\PagebreakPositions\PagebreakPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubtotalPositions\SubtotalPositionBody;
@@ -248,6 +264,7 @@ use Fatpanda\BexioConnector\RequestQuery\Sales\DocumentSettingsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicePaymentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\OrdersRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\PagebreakPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\SubpositionPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\SubtotalPositionsRequestQuery;
@@ -685,10 +702,10 @@ class BexioConnector
     }
 
     /**
-     * @param ContactBulkBody $body
+     * @param ContactArrayBody $body
      * @return Response|SuccessResponse|ErrorResponse
      */
-    public function postContactsBulk(ContactBulkBody $body): Response
+    public function postContactsBulk(ContactArrayBody $body): Response
     {
         $this->body = $body;
         $request = new CreateContactsBulkRequest(...$this->getRequestParameters());
@@ -2237,6 +2254,150 @@ class BexioConnector
         $this->pathParameters['document_id'] = $documentId;
         $this->pathParameters['position_id'] = $positionId;
         $request = new DeleteSubpositionPositionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Sales\Orders
+
+    /**
+     * @param OrdersRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getOrdersList(?OrdersRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListOrdersRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $orderId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getOrder(int $orderId): Response
+    {
+        $this->pathParameters['order_id'] = $orderId;
+        $request = new ShowOrderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $orderId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getOrderPdf(int $orderId): Response
+    {
+        $this->pathParameters['order_id'] = $orderId;
+        $request = new ShowOrderPDFRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param OrderBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postOrder(OrderBody $body = null): Response
+    {
+        $this->body = $body;
+        $request = new CreateOrderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param OrdersSearchBody $body
+     * @param OrdersRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchOrders(OrdersSearchBody $body, ?OrdersRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchOrdersRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $orderId
+     * @param OrderBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putOrder(int $orderId, OrderBody $body): Response
+    {
+        $this->pathParameters['order_id'] = $orderId;
+        $this->body = $body;
+        $request = new EditOrderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $orderId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteOrder(int $orderId): Response
+    {
+        $this->pathParameters['order_id'] = $orderId;
+        $request = new DeleteOrderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $orderId
+     * @param PositionsArrayBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCreateDeliveryFromOrder(int $orderId, PositionsArrayBody $body): Response
+    {
+        $this->pathParameters['order_id'] = $orderId;
+        $this->body = $body;
+        $request = new CreateDeliveryFromOrderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $orderId
+     * @param PositionsArrayBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCreateInvoiceFromOrder(int $orderId, PositionsArrayBody $body): Response
+    {
+        $this->pathParameters['order_id'] = $orderId;
+        $this->body = $body;
+        $request = new CreateInvoiceFromOrderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $orderId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getOrderRepetition(int $orderId): Response
+    {
+        $this->pathParameters['order_id'] = $orderId;
+        $request = new ShowOrderRepetitionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $orderId
+     * @param OrderRepetitionBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postOrderRepetition(int $orderId, OrderRepetitionBody $body): Response
+    {
+        $this->pathParameters['order_id'] = $orderId;
+        $this->body = $body;
+        $request = new EditOrderRepetitionRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $orderId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteOrderRepetition(int $orderId): Response
+    {
+        $this->pathParameters['order_id'] = $orderId;
+        $request = new DeleteOrderRepetitionRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
