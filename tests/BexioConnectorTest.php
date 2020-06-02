@@ -35,6 +35,8 @@ use Fatpanda\BexioConnector\Container\Sales\DocumentSetting;
 use Fatpanda\BexioConnector\Container\Sales\File;
 use Fatpanda\BexioConnector\Container\Sales\Invoice;
 use Fatpanda\BexioConnector\Container\Projects\TimesheetStatus;
+use Fatpanda\BexioConnector\Container\Sales\InvoicePayment;
+use Fatpanda\BexioConnector\Container\Sales\InvoiceReminder;
 use Fatpanda\BexioConnector\Container\Sales\ItemPosition;
 use Fatpanda\BexioConnector\Container\Sales\PagebreakPosition;
 use Fatpanda\BexioConnector\Container\Sales\SubpositionPosition;
@@ -75,8 +77,13 @@ use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody
 use Fatpanda\BexioConnector\RequestBody\Sales\Comments\CommentBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\DefaultPositions\DefaultPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\DiscountPositions\DiscountPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\CopyInvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicePaymentBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceRemindersSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\SendInvoiceBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\SendInvoiceReminderBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\ItemPositions\ItemPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\PagebreakPositions\PagebreakPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPositionBody;
@@ -112,6 +119,7 @@ use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DeliveriesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DiscountPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DocumentSettingsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicePaymentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\PagebreakPositionsRequestQuery;
@@ -774,6 +782,7 @@ class BexioConnectorTest extends TestCase
     public function testInvoice()
     {
         $responseBodyClass = Invoice::class;
+        $responseBodySuccessClass = Success::class;
         $query = new InvoicesRequestQuery();
         $body = new InvoiceBody();
         $searchBody = new InvoicesSearchBody();
@@ -784,7 +793,53 @@ class BexioConnectorTest extends TestCase
         $this->runRequest('getInvoice', $responseBodyClass, [self::REQUEST_PARAM_INT]);
         $this->runRequest('getInvoicePdf', File::class, [self::REQUEST_PARAM_INT]);
         $this->runRequest('putInvoice', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
-        $this->runRequest('deleteInvoice', Success::class, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('deleteInvoice', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postIssueInvoice', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postRevertIssueInvoice', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postCancelInvoice', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postMarkAsSentInvoiceRequest', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+
+        $body = new CopyInvoiceBody();
+        $this->runRequest('postCopyInvoice', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+
+        $body = new SendInvoiceBody();
+        $this->runRequest('postSendInvoiceRequest', $responseBodySuccessClass, [self::REQUEST_PARAM_INT, $body]);
+
+        $responseBodyClass = InvoicePayment::class;
+        $query = new InvoicePaymentsRequestQuery();
+        $body = new InvoicePaymentBody();
+        $this->runListRequest('getInvoicePaymentsList', $responseBodyClass, [self::REQUEST_PARAM_INT], $query);
+        $this->runRequest('postInvoicePayment', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+
+        $parameters = [
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('getInvoicePayment', $responseBodyClass, $parameters);
+        $this->runRequest('deleteInvoicePayment', $responseBodySuccessClass, $parameters);
+
+        $responseBodyClass = InvoiceReminder::class;
+        $searchBody = new InvoiceRemindersSearchBody();
+        $this->runListRequest('getInvoiceRemindersList', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postInvoiceReminder', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runListRequest('postSearchInvoiceReminders', $responseBodyClass, [self::REQUEST_PARAM_INT, $searchBody]);
+
+        $parameters = [
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+        ];
+        $this->runRequest('getInvoiceReminder', $responseBodyClass, $parameters);
+        $this->runRequest('deleteInvoiceReminder', $responseBodySuccessClass, $parameters);
+        $this->runRequest('postMarkAsSentInvoiceReminderRequest', $responseBodySuccessClass, $parameters);
+        $this->runRequest('postMarkAsUnsentInvoiceReminder', $responseBodySuccessClass, $parameters);
+        $this->runRequest('getInvoiceReminderPdf', File::class, $parameters);
+
+        $parameters = [
+            self::REQUEST_PARAM_INT,
+            self::REQUEST_PARAM_INT,
+            new SendInvoiceReminderBody(),
+        ];
+        $this->runRequest('postSendInvoiceReminderRequest', $responseBodySuccessClass, $parameters);
     }
 
     protected function getConnector(array $responses = []): BexioConnector

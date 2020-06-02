@@ -117,12 +117,31 @@ use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\EditDiscountPosition
 use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\ListDiscountPositionsRequest;
 use Fatpanda\BexioConnector\Request\Sales\DiscountPositions\ShowDiscountPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\DocumentSettings\ListDocumentSettingsRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\CancelInvoiceRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\CopyInvoiceRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\CreateInvoicePaymentRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\CreateInvoiceReminderRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\CreateInvoiceRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\DeleteInvoicePaymentRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\DeleteInvoiceReminderRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\DeleteInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\EditInvoiceRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\IssueInvoiceRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\ListInvoicePaymentsRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\ListInvoiceRemindersRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\ListInvoicesRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\MarkAsSentInvoiceReminderRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\MarkAsSentInvoiceRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\MarkAsUnsentInvoiceReminderRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\RevertIssueInvoiceRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\SearchInvoiceRemindersRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\SearchInvoicesRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\SendInvoiceReminderRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\SendInvoiceRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\ShowInvoicePaymentRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\ShowInvoicePDFRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\ShowInvoiceReminderPDFRequest;
+use Fatpanda\BexioConnector\Request\Sales\Invoices\ShowInvoiceReminderRequest;
 use Fatpanda\BexioConnector\Request\Sales\Invoices\ShowInvoiceRequest;
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\CreateItemPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\ItemPositions\DeleteItemPositionRequest;
@@ -184,8 +203,13 @@ use Fatpanda\BexioConnector\RequestBody\RequestBodyInterface;
 use Fatpanda\BexioConnector\RequestBody\Sales\Comments\CommentBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\DefaultPositions\DefaultPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\DiscountPositions\DiscountPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\CopyInvoiceBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicePaymentBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoiceRemindersSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\InvoicesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\SendInvoiceBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Invoices\SendInvoiceReminderBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\ItemPositions\ItemPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\PagebreakPositions\PagebreakPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPositionBody;
@@ -221,6 +245,7 @@ use Fatpanda\BexioConnector\RequestQuery\Sales\DefaultPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DeliveriesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DiscountPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\DocumentSettingsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicePaymentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\PagebreakPositionsRequestQuery;
@@ -2330,6 +2355,243 @@ class BexioConnector
     {
         $this->pathParameters['invoice_id'] = $invoiceId;
         $request = new DeleteInvoiceRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param CopyInvoiceBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCopyInvoice(int $invoiceId, CopyInvoiceBody $body): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->body = $body;
+        $request = new CopyInvoiceRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postIssueInvoice(int $invoiceId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $request = new IssueInvoiceRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postRevertIssueInvoice(int $invoiceId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $request = new RevertIssueInvoiceRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCancelInvoice(int $invoiceId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $request = new CancelInvoiceRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postMarkAsSentInvoiceRequest(int $invoiceId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $request = new MarkAsSentInvoiceRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param SendInvoiceBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSendInvoiceRequest(int $invoiceId, SendInvoiceBody $body): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->body = $body;
+        $request = new SendInvoiceRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param InvoicePaymentsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getInvoicePaymentsList(int $invoiceId, ?InvoicePaymentsRequestQuery $query = null): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->query = $query;
+        $request = new ListInvoicePaymentsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param int $paymentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getInvoicePayment(int $invoiceId, int $paymentId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->pathParameters['payment_id'] = $paymentId;
+        $request = new ShowInvoicePaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param InvoicePaymentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postInvoicePayment(int $invoiceId, InvoicePaymentBody $body = null): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->body = $body;
+        $request = new CreateInvoicePaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param int $paymentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteInvoicePayment(int $invoiceId, int $paymentId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->pathParameters['payment_id'] = $paymentId;
+        $request = new DeleteInvoicePaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getInvoiceRemindersList(int $invoiceId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $request = new ListInvoiceRemindersRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postInvoiceReminder(int $invoiceId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $request = new CreateInvoiceReminderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param InvoiceRemindersSearchBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchInvoiceReminders(int $invoiceId, InvoiceRemindersSearchBody $body): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->body = $body;
+        $request = new SearchInvoiceRemindersRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param int $reminderId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getInvoiceReminder(int $invoiceId, int $reminderId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->pathParameters['reminder_id'] = $reminderId;
+        $request = new ShowInvoiceReminderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param int $reminderId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteInvoiceReminder(int $invoiceId, int $reminderId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->pathParameters['reminder_id'] = $reminderId;
+        $request = new DeleteInvoiceReminderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param int $reminderId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postMarkAsSentInvoiceReminderRequest(int $invoiceId, int $reminderId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->pathParameters['reminder_id'] = $reminderId;
+        $request = new MarkAsSentInvoiceReminderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param int $reminderId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postMarkAsUnsentInvoiceReminder(int $invoiceId, int $reminderId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->pathParameters['reminder_id'] = $reminderId;
+        $request = new MarkAsUnsentInvoiceReminderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param int $reminderId
+     * @param SendInvoiceReminderBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSendInvoiceReminderRequest(int $invoiceId, int $reminderId, SendInvoiceReminderBody $body): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->pathParameters['reminder_id'] = $reminderId;
+        $this->body = $body;
+        $request = new SendInvoiceReminderRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @param int $reminderId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getInvoiceReminderPdf(int $invoiceId, int $reminderId): Response
+    {
+        $this->pathParameters['invoice_id'] = $invoiceId;
+        $this->pathParameters['reminder_id'] = $reminderId;
+        $request = new ShowInvoiceReminderPDFRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
