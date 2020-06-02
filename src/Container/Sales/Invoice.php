@@ -236,7 +236,7 @@ class Invoice implements ContainerInterface
     /**
      * @var DateTime
      * @SerializedName("updated_at")
-     * @Type("DateTime<'Y-m-d H:m:i'>")
+     * @Type("DateTime<'Y-m-d H:i:s'>")
      */
     protected $updatedAt;
 

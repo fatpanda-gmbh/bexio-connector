@@ -26,7 +26,7 @@ class Note implements ContainerInterface
     /**
      * @var DateTime
      * @SerializedName("event_start")
-     * @Type("DateTime<'Y-m-d H:m:i'>")
+     * @Type("DateTime<'Y-m-d H:i:s'>")
      */
     protected $eventStart;
 

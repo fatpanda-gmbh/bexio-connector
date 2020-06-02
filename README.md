@@ -1,6 +1,6 @@
 # Bexio connector
 
-[![Build Status](https://travis-ci.org/fatpanda-gmbh/bexio-connector.svg?branch=master)](https://travis-ci.org/fatpanda-gmbh/bexio-connector)
+[![Build Status](https://travis-ci.org/fatpanda-gmbh/bexio-connector.svg?branch=develop)](https://travis-ci.org/fatpanda-gmbh/bexio-connector)
 
 A php library to communicate with the [Bexio API](https://docs.bexio.com).
 It uses the recently supported JWT authentication for stateless machine-to-machine communication.

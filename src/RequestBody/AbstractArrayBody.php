@@ -2,7 +2,7 @@
 
 namespace Fatpanda\BexioConnector\RequestBody;
 
-abstract class AbstractBulkBody implements RequestBodyInterface
+abstract class AbstractArrayBody implements RequestBodyInterface
 {
     protected const ITEM_CLASS = '';
 
@@ -22,7 +22,7 @@ abstract class AbstractBulkBody implements RequestBodyInterface
         return $this;
     }
 
-    public function createItem(): RequestBodyItemInterface
+    public function createItem()
     {
         $class = static::ITEM_CLASS;
         $item = new $class();

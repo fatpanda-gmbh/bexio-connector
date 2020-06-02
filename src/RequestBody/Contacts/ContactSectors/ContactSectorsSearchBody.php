@@ -6,5 +6,5 @@ use Fatpanda\BexioConnector\RequestBody\AbstractSearchBody;
 
 class ContactSectorsSearchBody extends AbstractSearchBody
 {
-    protected const ITEM_CLASS = TitlesSearchBodyItem::class;
+    protected const ITEM_CLASS = ContactSectorsSearchBodyItem::class;
 }
