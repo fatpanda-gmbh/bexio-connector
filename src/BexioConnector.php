@@ -165,6 +165,23 @@ use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\DeletePagebreakPosi
 use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\EditPagebreakPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\ListPagebreakPositionsRequest;
 use Fatpanda\BexioConnector\Request\Sales\PagebreakPositions\ShowPagebreakPositionRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\AcceptQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\CopyQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\CreateInvoiceFromQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\CreateOrderFromQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\CreateQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\DeclineQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\DeleteQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\EditQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\IssueQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\ListQuotesRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\MarkAsSentQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\ReissueQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\RevertIssueQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\SearchQuotesRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\SendQuoteRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\ShowQuotePDFRequest;
+use Fatpanda\BexioConnector\Request\Sales\Quotes\ShowQuoteRequest;
 use Fatpanda\BexioConnector\Request\Sales\SubpositionPositions\CreateSubpositionPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\SubpositionPositions\DeleteSubpositionPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\SubpositionPositions\EditSubpositionPositionRequest;
@@ -228,6 +245,10 @@ use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrderRepetitionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrdersSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Orders\PositionsArrayBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\PagebreakPositions\PagebreakPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\CopyQuoteBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\QuoteBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\QuotesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\SendQuoteBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubtotalPositions\SubtotalPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\TextPositions\TextPositionBody;
@@ -266,6 +287,7 @@ use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\OrdersRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\PagebreakPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\QuotesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\SubpositionPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\SubtotalPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\TextPositionsRequestQuery;
@@ -2257,6 +2279,207 @@ class BexioConnector
         return $request->execute();
     }
 
+    // Sales\Quotes
+
+    /**
+     * @param QuotesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getQuotesList(?QuotesRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListQuotesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getQuote(int $quoteId): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $request = new ShowQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getQuotePdf(int $quoteId): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $request = new ShowQuotePDFRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param QuoteBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postQuote(QuoteBody $body = null): Response
+    {
+        $this->body = $body;
+        $request = new CreateQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param QuotesSearchBody $body
+     * @param QuotesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchQuotes(QuotesSearchBody $body, ?QuotesRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchQuotesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @param QuoteBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putQuote(int $quoteId, QuoteBody $body): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $this->body = $body;
+        $request = new EditQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteQuote(int $quoteId): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $request = new DeleteQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postIssueQuote(int $quoteId): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $request = new IssueQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postRevertIssueQuote(int $quoteId): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $request = new RevertIssueQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postAcceptQuote(int $quoteId): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $request = new AcceptQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postDeclineQuote(int $quoteId): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $request = new DeclineQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postReissueQuote(int $quoteId): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $request = new ReissueQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postMarkAsSentQuote(int $quoteId): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $request = new MarkAsSentQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @param SendQuoteBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSendQuote(int $quoteId, SendQuoteBody $body): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $this->body = $body;
+        $request = new SendQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @param CopyQuoteBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCopyQuote(int $quoteId, CopyQuoteBody $body): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $this->body = $body;
+        $request = new CopyQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @param PositionsArrayBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCreateOrderFromQuote(int $quoteId, PositionsArrayBody $body): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $this->body = $body;
+        $request = new CreateOrderFromQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $quoteId
+     * @param PositionsArrayBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCreateInvoiceFromQuote(int $quoteId, PositionsArrayBody $body): Response
+    {
+        $this->pathParameters['quote_id'] = $quoteId;
+        $this->body = $body;
+        $request = new CreateInvoiceFromQuoteRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
     // Sales\Orders
 
     /**
@@ -2569,7 +2792,7 @@ class BexioConnector
      * @param int $invoiceId
      * @return Response|SuccessResponse|ErrorResponse
      */
-    public function postMarkAsSentInvoiceRequest(int $invoiceId): Response
+    public function postMarkAsSentInvoice(int $invoiceId): Response
     {
         $this->pathParameters['invoice_id'] = $invoiceId;
         $request = new MarkAsSentInvoiceRequest(...$this->getRequestParameters());
@@ -2581,7 +2804,7 @@ class BexioConnector
      * @param SendInvoiceBody $body
      * @return Response|SuccessResponse|ErrorResponse
      */
-    public function postSendInvoiceRequest(int $invoiceId, SendInvoiceBody $body): Response
+    public function postSendInvoice(int $invoiceId, SendInvoiceBody $body): Response
     {
         $this->pathParameters['invoice_id'] = $invoiceId;
         $this->body = $body;
@@ -2707,7 +2930,7 @@ class BexioConnector
      * @param int $reminderId
      * @return Response|SuccessResponse|ErrorResponse
      */
-    public function postMarkAsSentInvoiceReminderRequest(int $invoiceId, int $reminderId): Response
+    public function postMarkAsSentInvoiceReminder(int $invoiceId, int $reminderId): Response
     {
         $this->pathParameters['invoice_id'] = $invoiceId;
         $this->pathParameters['reminder_id'] = $reminderId;
@@ -2734,7 +2957,7 @@ class BexioConnector
      * @param SendInvoiceReminderBody $body
      * @return Response|SuccessResponse|ErrorResponse
      */
-    public function postSendInvoiceReminderRequest(int $invoiceId, int $reminderId, SendInvoiceReminderBody $body): Response
+    public function postSendInvoiceReminder(int $invoiceId, int $reminderId, SendInvoiceReminderBody $body): Response
     {
         $this->pathParameters['invoice_id'] = $invoiceId;
         $this->pathParameters['reminder_id'] = $reminderId;

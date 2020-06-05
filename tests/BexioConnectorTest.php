@@ -41,6 +41,7 @@ use Fatpanda\BexioConnector\Container\Sales\ItemPosition;
 use Fatpanda\BexioConnector\Container\Sales\Order;
 use Fatpanda\BexioConnector\Container\Sales\OrderRepetition;
 use Fatpanda\BexioConnector\Container\Sales\PagebreakPosition;
+use Fatpanda\BexioConnector\Container\Sales\Quote;
 use Fatpanda\BexioConnector\Container\Sales\SubpositionPosition;
 use Fatpanda\BexioConnector\Container\Sales\SubtotalPosition;
 use Fatpanda\BexioConnector\Container\Sales\TextPosition;
@@ -92,6 +93,10 @@ use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrderRepetitionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrdersSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Orders\PositionsArrayBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\PagebreakPositions\PagebreakPositionBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\CopyQuoteBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\QuoteBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\QuotesSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\SendQuoteBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubtotalPositions\SubtotalPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\TextPositions\TextPositionBody;
@@ -130,6 +135,7 @@ use Fatpanda\BexioConnector\RequestQuery\Sales\InvoicesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\ItemPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\OrdersRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\PagebreakPositionsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Sales\QuotesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\SubpositionPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\SubtotalPositionsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Sales\TextPositionsRequestQuery;
@@ -778,6 +784,44 @@ class BexioConnectorTest extends TestCase
         $this->runRequest('getOrderComment', $responseBodyClass, $parameters);
     }
 
+    public function testQuote()
+    {
+        $responseBodyClass = Quote::class;
+        $responseBodySuccessClass = Success::class;
+        $query = new QuotesRequestQuery();
+        $body = new QuoteBody();
+        $searchBody = new QuotesSearchBody();
+
+        $this->runListRequest('getQuotesList', $responseBodyClass, [], $query);
+        $this->runRequest('postQuote', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchQuotes', $responseBodyClass, [$searchBody], $query);
+        $this->runRequest('getQuote', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('getQuotePdf', File::class, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('putQuote', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteQuote', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postIssueQuote', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postRevertIssueQuote', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postAcceptQuote', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postDeclineQuote', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postReissueQuote', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postMarkAsSentQuote', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+
+        $body = new CopyQuoteBody();
+        $this->runRequest('postCopyQuote', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+
+        $body = new SendQuoteBody();
+        $this->runRequest('postSendQuote', $responseBodySuccessClass, [self::REQUEST_PARAM_INT, $body]);
+
+        $body = new PositionsArrayBody();
+        $item = $body->createItem();
+        $item->setId(self::REQUEST_PARAM_INT)
+            ->setAmount(self::REQUEST_PARAM_INT)
+            ->setType($item::POSITION_TYPE_ARTICLE)
+        ;
+        $this->runRequest('postCreateOrderFromQuote', Order::class, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('postCreateInvoiceFromQuote', Invoice::class, [self::REQUEST_PARAM_INT, $body]);
+    }
+
     public function testOrder()
     {
         $responseBodyClass = Order::class;
@@ -838,13 +882,13 @@ class BexioConnectorTest extends TestCase
         $this->runRequest('postIssueInvoice', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
         $this->runRequest('postRevertIssueInvoice', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
         $this->runRequest('postCancelInvoice', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
-        $this->runRequest('postMarkAsSentInvoiceRequest', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postMarkAsSentInvoice', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);
 
         $body = new CopyInvoiceBody();
         $this->runRequest('postCopyInvoice', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
 
         $body = new SendInvoiceBody();
-        $this->runRequest('postSendInvoiceRequest', $responseBodySuccessClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('postSendInvoice', $responseBodySuccessClass, [self::REQUEST_PARAM_INT, $body]);
 
         $responseBodyClass = InvoicePayment::class;
         $query = new InvoicePaymentsRequestQuery();
@@ -871,7 +915,7 @@ class BexioConnectorTest extends TestCase
         ];
         $this->runRequest('getInvoiceReminder', $responseBodyClass, $parameters);
         $this->runRequest('deleteInvoiceReminder', $responseBodySuccessClass, $parameters);
-        $this->runRequest('postMarkAsSentInvoiceReminderRequest', $responseBodySuccessClass, $parameters);
+        $this->runRequest('postMarkAsSentInvoiceReminder', $responseBodySuccessClass, $parameters);
         $this->runRequest('postMarkAsUnsentInvoiceReminder', $responseBodySuccessClass, $parameters);
         $this->runRequest('getInvoiceReminderPdf', File::class, $parameters);
 
@@ -880,7 +924,7 @@ class BexioConnectorTest extends TestCase
             self::REQUEST_PARAM_INT,
             new SendInvoiceReminderBody(),
         ];
-        $this->runRequest('postSendInvoiceReminderRequest', $responseBodySuccessClass, $parameters);
+        $this->runRequest('postSendInvoiceReminder', $responseBodySuccessClass, $parameters);
     }
 
     protected function getConnector(array $responses = []): BexioConnector
