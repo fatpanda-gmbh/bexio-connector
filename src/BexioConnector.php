@@ -5,6 +5,18 @@ namespace Fatpanda\BexioConnector;
 use Fatpanda\BexioConnector\Message\Response;
 use Fatpanda\BexioConnector\Request\Banking\BankAccounts\ListBankAccountsRequest;
 use Fatpanda\BexioConnector\Request\Banking\BankAccounts\ShowBankAccountRequest;
+use Fatpanda\BexioConnector\Request\Banking\BankPayments\CancelBankPaymentRequest;
+use Fatpanda\BexioConnector\Request\Banking\BankPayments\DeleteBankPaymentRequest;
+use Fatpanda\BexioConnector\Request\Banking\BankPayments\ListBankPaymentsRequest;
+use Fatpanda\BexioConnector\Request\Banking\IBANPayments\CreateIBANPaymentRequest;
+use Fatpanda\BexioConnector\Request\Banking\IBANPayments\ShowIBANPaymentRequest;
+use Fatpanda\BexioConnector\Request\Banking\IBANPayments\UpdateIBANPaymentRequest;
+use Fatpanda\BexioConnector\Request\Banking\ISPayments\CreateISPaymentRequest;
+use Fatpanda\BexioConnector\Request\Banking\ISPayments\ShowISPaymentRequest;
+use Fatpanda\BexioConnector\Request\Banking\ISPayments\UpdateISPaymentRequest;
+use Fatpanda\BexioConnector\Request\Banking\ISRPayments\CreateISRPaymentRequest;
+use Fatpanda\BexioConnector\Request\Banking\ISRPayments\ShowISRPaymentRequest;
+use Fatpanda\BexioConnector\Request\Banking\ISRPayments\UpdateISRPaymentRequest;
 use Fatpanda\BexioConnector\Request\Contacts\AdditionalAddresses\CreateAdditionalAddressRequest;
 use Fatpanda\BexioConnector\Request\Contacts\AdditionalAddresses\DeleteAdditionalAddressRequest;
 use Fatpanda\BexioConnector\Request\Contacts\AdditionalAddresses\EditAdditionalAddressRequest;
@@ -197,6 +209,9 @@ use Fatpanda\BexioConnector\Request\Sales\TextPositions\DeleteTextPositionReques
 use Fatpanda\BexioConnector\Request\Sales\TextPositions\EditTextPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\TextPositions\ListTextPositionsRequest;
 use Fatpanda\BexioConnector\Request\Sales\TextPositions\ShowTextPositionRequest;
+use Fatpanda\BexioConnector\RequestBody\Banking\IBANPayments\IBANPaymentBody;
+use Fatpanda\BexioConnector\RequestBody\Banking\ISPayments\ISPaymentBody;
+use Fatpanda\BexioConnector\RequestBody\Banking\ISRPayments\ISRPaymentBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactGroups\ContactGroupBody;
@@ -253,6 +268,7 @@ use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPo
 use Fatpanda\BexioConnector\RequestBody\Sales\SubtotalPositions\SubtotalPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\TextPositions\TextPositionBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Banking\BankPaymentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactGroupsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactRelationsRequestQuery;
@@ -390,6 +406,167 @@ class BexioConnector
     {
         $this->pathParameters['bank_account_id'] = $bankAccountId;
         $request = new ShowBankAccountRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Banking\BankPayments
+
+    /**
+     * @param BankPaymentsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getBankPaymentsList(?BankPaymentsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListBankPaymentsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int|string $paymentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteBankPayment($paymentId): Response
+    {
+        $this->pathParameters['payment_id'] = $paymentId;
+        $request = new DeleteBankPaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int|string $paymentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCancelBankPayment($paymentId): Response
+    {
+        $this->pathParameters['payment_id'] = $paymentId;
+        $request = new CancelBankPaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Banking\IBANPayments
+    /**
+     * @param int $bankAccountId
+     * @param IBANPaymentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postIBANPayment(int $bankAccountId, IBANPaymentBody $body): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $this->body = $body;
+        $request = new CreateIBANPaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $bankAccountId
+     * @param int|string $paymentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getIBANPayment(int $bankAccountId, $paymentId): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $this->pathParameters['payment_id'] = $paymentId;
+        $request = new ShowIBANPaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $bankAccountId
+     * @param int|string $paymentId
+     * @param IBANPaymentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function patchIBANPayment(int $bankAccountId, $paymentId, IBANPaymentBody $body): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $this->pathParameters['payment_id'] = $paymentId;
+        $this->body = $body;
+        $request = new UpdateIBANPaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Banking\ISPayments
+    /**
+     * @param int $bankAccountId
+     * @param ISPaymentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postISPayment(int $bankAccountId, ISPaymentBody $body): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $this->body = $body;
+        $request = new CreateISPaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $bankAccountId
+     * @param int|string $paymentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getISPayment(int $bankAccountId, $paymentId): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $this->pathParameters['payment_id'] = $paymentId;
+        $request = new ShowISPaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $bankAccountId
+     * @param int|string $paymentId
+     * @param ISPaymentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function patchISPayment(int $bankAccountId, $paymentId, ISPaymentBody $body): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $this->pathParameters['payment_id'] = $paymentId;
+        $this->body = $body;
+        $request = new UpdateISPaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Banking\ISRPayments
+    /**
+     * @param int $bankAccountId
+     * @param ISRPaymentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postISRPayment(int $bankAccountId, ISRPaymentBody $body): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $this->body = $body;
+        $request = new CreateISRPaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $bankAccountId
+     * @param int|string $paymentId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getISRPayment(int $bankAccountId, $paymentId): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $this->pathParameters['payment_id'] = $paymentId;
+        $request = new ShowISRPaymentRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $bankAccountId
+     * @param int|string $paymentId
+     * @param ISRPaymentBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function patchISRPayment(int $bankAccountId, $paymentId, ISRPaymentBody $body): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $this->pathParameters['payment_id'] = $paymentId;
+        $this->body = $body;
+        $request = new UpdateISRPaymentRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 

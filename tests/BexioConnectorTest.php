@@ -4,6 +4,10 @@ namespace Fatpanda\BexioConnector\Tests;
 
 use Fatpanda\BexioConnector\BexioConnector;
 use Fatpanda\BexioConnector\Container\Banking\BankAccount;
+use Fatpanda\BexioConnector\Container\Banking\BankIBANPayment;
+use Fatpanda\BexioConnector\Container\Banking\BankISPayment;
+use Fatpanda\BexioConnector\Container\Banking\BankISRPayment;
+use Fatpanda\BexioConnector\Container\Banking\BankPayment;
 use Fatpanda\BexioConnector\Container\Contacts\AdditionalAddress;
 use Fatpanda\BexioConnector\Container\Contacts\Contact;
 use Fatpanda\BexioConnector\Container\Contacts\ContactGroup;
@@ -46,6 +50,11 @@ use Fatpanda\BexioConnector\Container\Sales\SubpositionPosition;
 use Fatpanda\BexioConnector\Container\Sales\SubtotalPosition;
 use Fatpanda\BexioConnector\Container\Sales\TextPosition;
 use Fatpanda\BexioConnector\Container\Success;
+use Fatpanda\BexioConnector\RequestBody\Banking\BankPaymentAmount;
+use Fatpanda\BexioConnector\RequestBody\Banking\BankPaymentRecipient;
+use Fatpanda\BexioConnector\RequestBody\Banking\IBANPayments\IBANPaymentBody;
+use Fatpanda\BexioConnector\RequestBody\Banking\ISPayments\ISPaymentBody;
+use Fatpanda\BexioConnector\RequestBody\Banking\ISRPayments\ISRPaymentBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\AdditionalAddresses\AdditionalAddressesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactGroups\ContactGroupBody;
@@ -101,6 +110,7 @@ use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPo
 use Fatpanda\BexioConnector\RequestBody\Sales\SubtotalPositions\SubtotalPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\TextPositions\TextPositionBody;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Banking\BankPaymentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactGroupsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactRelationsRequestQuery;
@@ -163,6 +173,67 @@ class BexioConnectorTest extends TestCase
 
         $this->runListRequest('getBankAccountsList', $responseBodyClass, [], $query);
         $this->runRequest('getBankAccount', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+    }
+
+    public function testBankPayment()
+    {
+        $responseBodyClass = BankPayment::class;
+        $query = new BankPaymentsRequestQuery();
+
+        $this->runListRequest('getBankPaymentsList', $responseBodyClass, [], $query);
+        $this->runRequest('deleteBankPayment', Success::class, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('postCancelBankPayment', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+    }
+
+    public function testBankIBANPayments()
+    {
+        $responseBodyClass = BankIBANPayment::class;
+        $body = new IBANPaymentBody();
+        $body->setInstructedAmount(new BankPaymentAmount)
+            ->setRecipient(new BankPaymentRecipient())
+        ;
+
+        $this->runRequest('postIBANPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+
+        $this->runRequest('getIBANPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_INT]);
+        $this->runRequest('getIBANPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_STRING]);
+
+        $this->runRequest('patchIBANPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('patchIBANPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_STRING, $body]);
+    }
+
+    public function testBankISPayments()
+    {
+        $responseBodyClass = BankISPayment::class;
+        $body = new ISPaymentBody();
+        $body->setInstructedAmount(new BankPaymentAmount)
+            ->setRecipient(new BankPaymentRecipient())
+        ;
+
+        $this->runRequest('postISPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+
+        $this->runRequest('getISPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_INT]);
+        $this->runRequest('getISPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_STRING]);
+
+        $this->runRequest('patchISPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('patchISPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_STRING, $body]);
+    }
+
+    public function testBankISRPayments()
+    {
+        $responseBodyClass = BankISRPayment::class;
+        $body = new ISRPaymentBody();
+        $body->setInstructedAmount(new BankPaymentAmount)
+            ->setRecipient(new BankPaymentRecipient())
+        ;
+
+        $this->runRequest('postISRPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+
+        $this->runRequest('getISRPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_INT]);
+        $this->runRequest('getISRPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_STRING]);
+
+        $this->runRequest('patchISRPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('patchISRPayment', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_STRING, $body]);
     }
 
     public function testAdditionalAddress()
