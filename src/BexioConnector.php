@@ -3,6 +3,21 @@
 namespace Fatpanda\BexioConnector;
 
 use Fatpanda\BexioConnector\Message\Response;
+use Fatpanda\BexioConnector\Request\Accounting\AccountGroups\ListAccountGroupsRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Accounts\ListAccountsRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Accounts\SearchAccountsRequest;
+use Fatpanda\BexioConnector\Request\Accounting\BusinessYears\ListBusinessYearsRequest;
+use Fatpanda\BexioConnector\Request\Accounting\BusinessYears\ShowBusinessYearRequest;
+use Fatpanda\BexioConnector\Request\Accounting\CalendarYears\CreateCalendarYearRequest;
+use Fatpanda\BexioConnector\Request\Accounting\CalendarYears\ListCalendarYearsRequest;
+use Fatpanda\BexioConnector\Request\Accounting\CalendarYears\SearchCalendarYearsRequest;
+use Fatpanda\BexioConnector\Request\Accounting\CalendarYears\ShowCalendarYearRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Currencies\CreateCurrencyRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Currencies\DeleteCurrencyRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Currencies\ListCurrenciesRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Currencies\ListExchangeRatesRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Currencies\SearchCurrenciesRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Currencies\ShowCurrencyRequest;
 use Fatpanda\BexioConnector\Request\Banking\BankAccounts\ListBankAccountsRequest;
 use Fatpanda\BexioConnector\Request\Banking\BankAccounts\ShowBankAccountRequest;
 use Fatpanda\BexioConnector\Request\Banking\BankPayments\CancelBankPaymentRequest;
@@ -209,6 +224,10 @@ use Fatpanda\BexioConnector\Request\Sales\TextPositions\DeleteTextPositionReques
 use Fatpanda\BexioConnector\Request\Sales\TextPositions\EditTextPositionRequest;
 use Fatpanda\BexioConnector\Request\Sales\TextPositions\ListTextPositionsRequest;
 use Fatpanda\BexioConnector\Request\Sales\TextPositions\ShowTextPositionRequest;
+use Fatpanda\BexioConnector\RequestBody\Accounting\Accounts\AccountsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\CalendarYears\CalendarYearBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\CalendarYears\CalendarYearsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\Currencies\CurrencyBody;
 use Fatpanda\BexioConnector\RequestBody\Banking\IBANPayments\IBANPaymentBody;
 use Fatpanda\BexioConnector\RequestBody\Banking\ISPayments\ISPaymentBody;
 use Fatpanda\BexioConnector\RequestBody\Banking\ISRPayments\ISRPaymentBody;
@@ -267,6 +286,11 @@ use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\SendQuoteBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubtotalPositions\SubtotalPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\TextPositions\TextPositionBody;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\AccountGroupsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\AccountsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\BusinessYearsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\CalendarYearsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\CurrenciesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankPaymentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
@@ -382,6 +406,195 @@ class BexioConnector
     public function setClient(ClientInterface $client): void
     {
         $this->client = $client;
+    }
+
+    // Accounting
+    // Accounting\Accounts
+
+    /**
+     * @param AccountsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getAccountsList(?AccountsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListAccountsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $contactId
+     * @param AccountsSearchBody $body
+     * @param AccountsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchAccounts(
+        int $contactId,
+        AccountsSearchBody $body,
+        ?AccountsRequestQuery $query = null
+    ): Response {
+        $this->pathParameters['contact_id'] = $contactId;
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchAccountsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Accounting\AccountGroups
+
+    /**
+     * @param AccountGroupsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getAccountGroupsList(?AccountGroupsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListAccountGroupsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Accounting\CalendarYears
+
+    /**
+     * @param CalendarYearsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getCalendarYearsList(?CalendarYearsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListCalendarYearsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param CalendarYearBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCalendarYear(CalendarYearBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateCalendarYearRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param CalendarYearsSearchBody $body
+     * @param CalendarYearsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchCalendarYears(
+        CalendarYearsSearchBody $body,
+        ?CalendarYearsRequestQuery $query = null
+    ): Response {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchCalendarYearsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $calendarYearId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getCalendarYear(int $calendarYearId): Response
+    {
+        $this->pathParameters['calendar_year_id'] = $calendarYearId;
+        $request = new ShowCalendarYearRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Accounting\BusinessYears
+
+    /**
+     * @param BusinessYearsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getBusinessYearsList(?BusinessYearsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListBusinessYearsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $businessYearId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getBusinessYear(int $businessYearId): Response
+    {
+        $this->pathParameters['business_year_id'] = $businessYearId;
+        $request = new ShowBusinessYearRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Accounting\Currencies
+
+    /**
+     * @param CurrenciesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getCurrenciesList(?CurrenciesRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListCurrenciesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param CurrencyBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postCurrency(CurrencyBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateCurrencyRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $currencyId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getCurrency(int $currencyId): Response
+    {
+        $this->pathParameters['currency_id'] = $currencyId;
+        $request = new ShowCurrencyRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $currencyId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteCurrency(int $currencyId): Response
+    {
+        $this->pathParameters['currency_id'] = $currencyId;
+        $request = new DeleteCurrencyRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $currencyId
+     * @param CurrencyBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putCurrency(int $currencyId, CurrencyBody $body): Response
+    {
+        $this->pathParameters['currency_id'] = $currencyId;
+        $this->body = $body;
+        $request = new ShowCurrencyRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $currencyId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getListExchangeRates(int $currencyId): Response
+    {
+        $this->pathParameters['currency_id'] = $currencyId;
+        $request = new ListExchangeRatesRequest(...$this->getRequestParameters());
+        return $request->execute();
     }
 
     // Banking

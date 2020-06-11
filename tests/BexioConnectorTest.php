@@ -3,6 +3,12 @@
 namespace Fatpanda\BexioConnector\Tests;
 
 use Fatpanda\BexioConnector\BexioConnector;
+use Fatpanda\BexioConnector\Container\Accounting\Account;
+use Fatpanda\BexioConnector\Container\Accounting\AccountGroup;
+use Fatpanda\BexioConnector\Container\Accounting\BusinessYear;
+use Fatpanda\BexioConnector\Container\Accounting\CalendarYear;
+use Fatpanda\BexioConnector\Container\Accounting\Currency;
+use Fatpanda\BexioConnector\Container\Accounting\ExchangeRate;
 use Fatpanda\BexioConnector\Container\Banking\BankAccount;
 use Fatpanda\BexioConnector\Container\Banking\BankIBANPayment;
 use Fatpanda\BexioConnector\Container\Banking\BankISPayment;
@@ -50,6 +56,10 @@ use Fatpanda\BexioConnector\Container\Sales\SubpositionPosition;
 use Fatpanda\BexioConnector\Container\Sales\SubtotalPosition;
 use Fatpanda\BexioConnector\Container\Sales\TextPosition;
 use Fatpanda\BexioConnector\Container\Success;
+use Fatpanda\BexioConnector\RequestBody\Accounting\Accounts\AccountsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\CalendarYears\CalendarYearBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\CalendarYears\CalendarYearsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\Currencies\CurrencyBody;
 use Fatpanda\BexioConnector\RequestBody\Banking\BankPaymentAmount;
 use Fatpanda\BexioConnector\RequestBody\Banking\BankPaymentRecipient;
 use Fatpanda\BexioConnector\RequestBody\Banking\IBANPayments\IBANPaymentBody;
@@ -109,6 +119,11 @@ use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\SendQuoteBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubpositionPositions\SubpositionPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\SubtotalPositions\SubtotalPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\TextPositions\TextPositionBody;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\AccountGroupsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\AccountsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\BusinessYearsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\CalendarYearsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\CurrenciesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankPaymentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
@@ -165,6 +180,62 @@ class BexioConnectorTest extends TestCase
     protected const REQUEST_PARAM_STRING = 'string';
     protected const RESPONSE_STATUS = 200;
     protected const ERROR_MESSAGE = 'Error message';
+
+    public function testAccount()
+    {
+        $responseBodyClass = Account::class;
+        $query = new AccountsRequestQuery();
+        $searchBody = new AccountsSearchBody();
+
+        $this->runListRequest('getAccountsList', $responseBodyClass, [], $query);
+        $this->runListRequest('postSearchAccounts', $responseBodyClass, [self::REQUEST_PARAM_INT, $searchBody], $query);
+    }
+
+    public function testAccountGroup()
+    {
+        $responseBodyClass = AccountGroup::class;
+        $query = new AccountGroupsRequestQuery();
+
+        $this->runListRequest('getAccountGroupsList', $responseBodyClass, [], $query);
+    }
+
+    public function testCalendarYear()
+    {
+        $responseBodyClass = CalendarYear::class;
+        $query = new CalendarYearsRequestQuery();
+        $body = new CalendarYearBody();
+        $searchBody = new CalendarYearsSearchBody();
+
+        $this->runListRequest('getCalendarYearsList', $responseBodyClass, [], $query);
+        $this->runRequest('postCalendarYear', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchCalendarYears', $responseBodyClass, [$searchBody], $query);
+        $this->runRequest('getCalendarYear', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+    }
+
+    public function testBusinessYear()
+    {
+        $responseBodyClass = BusinessYear::class;
+        $query = new BusinessYearsRequestQuery();
+
+        $this->runListRequest('getBusinessYearsList', $responseBodyClass, [], $query);
+        $this->runRequest('getBusinessYear', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+    }
+
+    public function testCurrency()
+    {
+        $responseBodyClass = Currency::class;
+        $query = new CurrenciesRequestQuery();
+        $body = new CurrencyBody();
+
+        $this->runListRequest('getCurrenciesList', $responseBodyClass, [], $query);
+        $this->runRequest('postCurrency', $responseBodyClass, [$body]);
+        $this->runRequest('getCurrency', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('putCurrency', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteCurrency', Success::class, [self::REQUEST_PARAM_INT]);
+
+        $responseBodyClass = ExchangeRate::class;
+        $this->runListRequest('getListExchangeRates', $responseBodyClass, [self::REQUEST_PARAM_INT], $query);
+    }
 
     public function testBankAccount()
     {
