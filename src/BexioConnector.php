@@ -18,6 +18,12 @@ use Fatpanda\BexioConnector\Request\Accounting\Currencies\ListCurrenciesRequest;
 use Fatpanda\BexioConnector\Request\Accounting\Currencies\ListExchangeRatesRequest;
 use Fatpanda\BexioConnector\Request\Accounting\Currencies\SearchCurrenciesRequest;
 use Fatpanda\BexioConnector\Request\Accounting\Currencies\ShowCurrencyRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Reports\ListJournalEntriesRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Taxes\DeleteTaxRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Taxes\ListTaxesRequest;
+use Fatpanda\BexioConnector\Request\Accounting\Taxes\ShowTaxRequest;
+use Fatpanda\BexioConnector\Request\Accounting\VatPeriods\ListVatPeriodsRequest;
+use Fatpanda\BexioConnector\Request\Accounting\VatPeriods\ShowVatPeriodRequest;
 use Fatpanda\BexioConnector\Request\Banking\BankAccounts\ListBankAccountsRequest;
 use Fatpanda\BexioConnector\Request\Banking\BankAccounts\ShowBankAccountRequest;
 use Fatpanda\BexioConnector\Request\Banking\BankPayments\CancelBankPaymentRequest;
@@ -291,6 +297,9 @@ use Fatpanda\BexioConnector\RequestQuery\Accounting\AccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\BusinessYearsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\CalendarYearsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\CurrenciesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\JournalEntriesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\TaxesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\VatPeriodsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankPaymentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
@@ -594,6 +603,78 @@ class BexioConnector
     {
         $this->pathParameters['currency_id'] = $currencyId;
         $request = new ListExchangeRatesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Reports\JournalEntries
+
+    /**
+     * @param JournalEntriesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getJournalEntriesList(?JournalEntriesRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListJournalEntriesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Accounting\Taxes
+
+    /**
+     * @param TaxesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getTaxesList(?TaxesRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListTaxesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $taxId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getTax(int $taxId): Response
+    {
+        $this->pathParameters['tax_id'] = $taxId;
+        $request = new ShowTaxRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $taxId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteTax(int $taxId): Response
+    {
+        $this->pathParameters['tax_id'] = $taxId;
+        $request = new DeleteTaxRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Accounting\VatPeriods
+
+    /**
+     * @param VatPeriodsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getVatPeriodsList(?VatPeriodsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListVatPeriodsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $bankAccountId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getVatPeriod(int $bankAccountId): Response
+    {
+        $this->pathParameters['bank_account_id'] = $bankAccountId;
+        $request = new ShowVatPeriodRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 

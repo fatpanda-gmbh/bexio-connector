@@ -9,6 +9,9 @@ use Fatpanda\BexioConnector\Container\Accounting\BusinessYear;
 use Fatpanda\BexioConnector\Container\Accounting\CalendarYear;
 use Fatpanda\BexioConnector\Container\Accounting\Currency;
 use Fatpanda\BexioConnector\Container\Accounting\ExchangeRate;
+use Fatpanda\BexioConnector\Container\Accounting\JournalEntry;
+use Fatpanda\BexioConnector\Container\Accounting\Tax;
+use Fatpanda\BexioConnector\Container\Accounting\VatPeriod;
 use Fatpanda\BexioConnector\Container\Banking\BankAccount;
 use Fatpanda\BexioConnector\Container\Banking\BankIBANPayment;
 use Fatpanda\BexioConnector\Container\Banking\BankISPayment;
@@ -124,6 +127,9 @@ use Fatpanda\BexioConnector\RequestQuery\Accounting\AccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\BusinessYearsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\CalendarYearsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\CurrenciesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\JournalEntriesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\TaxesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\VatPeriodsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankPaymentsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\AdditionalAddressesRequestQuery;
@@ -235,6 +241,33 @@ class BexioConnectorTest extends TestCase
 
         $responseBodyClass = ExchangeRate::class;
         $this->runListRequest('getListExchangeRates', $responseBodyClass, [self::REQUEST_PARAM_INT], $query);
+    }
+
+    public function testJournalEntry()
+    {
+        $responseBodyClass = JournalEntry::class;
+        $query = new JournalEntriesRequestQuery();
+
+        $this->runListRequest('getJournalEntriesList', $responseBodyClass, [], $query);
+    }
+
+    public function testTax()
+    {
+        $responseBodyClass = Tax::class;
+        $query = new TaxesRequestQuery();
+
+        $this->runListRequest('getTaxesList', $responseBodyClass, [], $query);
+        $this->runRequest('getTax', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('deleteTax', Success::class, [self::REQUEST_PARAM_INT]);
+    }
+
+    public function testVatPeriod()
+    {
+        $responseBodyClass = VatPeriod::class;
+        $query = new VatPeriodsRequestQuery();
+
+        $this->runListRequest('getVatPeriodsList', $responseBodyClass, [], $query);
+        $this->runRequest('getVatPeriod', $responseBodyClass, [self::REQUEST_PARAM_INT]);
     }
 
     public function testBankAccount()
