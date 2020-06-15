@@ -10,6 +10,10 @@ use Fatpanda\BexioConnector\Container\Accounting\CalendarYear;
 use Fatpanda\BexioConnector\Container\Accounting\Currency;
 use Fatpanda\BexioConnector\Container\Accounting\ExchangeRate;
 use Fatpanda\BexioConnector\Container\Accounting\JournalEntry;
+use Fatpanda\BexioConnector\Container\Accounting\ManualEntry;
+use Fatpanda\BexioConnector\Container\Accounting\ManualEntryFile;
+use Fatpanda\BexioConnector\Container\Accounting\ManualEntryFileData;
+use Fatpanda\BexioConnector\Container\Accounting\NextReferenceNumber;
 use Fatpanda\BexioConnector\Container\Accounting\Tax;
 use Fatpanda\BexioConnector\Container\Accounting\VatPeriod;
 use Fatpanda\BexioConnector\Container\Banking\BankAccount;
@@ -63,6 +67,9 @@ use Fatpanda\BexioConnector\RequestBody\Accounting\Accounts\AccountsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Accounting\CalendarYears\CalendarYearBody;
 use Fatpanda\BexioConnector\RequestBody\Accounting\CalendarYears\CalendarYearsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Accounting\Currencies\CurrencyBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\ManualEntries\ManualEntryBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\ManualEntries\ManualEntryFileBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\ManualEntries\ManualEntryItemBody;
 use Fatpanda\BexioConnector\RequestBody\Banking\BankPaymentAmount;
 use Fatpanda\BexioConnector\RequestBody\Banking\BankPaymentRecipient;
 use Fatpanda\BexioConnector\RequestBody\Banking\IBANPayments\IBANPaymentBody;
@@ -128,6 +135,8 @@ use Fatpanda\BexioConnector\RequestQuery\Accounting\BusinessYearsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\CalendarYearsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\CurrenciesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\JournalEntriesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\ManualEntriesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\ManualEntryFilesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\TaxesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\VatPeriodsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
@@ -241,6 +250,34 @@ class BexioConnectorTest extends TestCase
 
         $responseBodyClass = ExchangeRate::class;
         $this->runListRequest('getListExchangeRates', $responseBodyClass, [self::REQUEST_PARAM_INT], $query);
+    }
+
+    public function testManualEntry()
+    {
+        $responseBodyClass = ManualEntry::class;
+        $query = new ManualEntriesRequestQuery();
+        $body = new ManualEntryBody();
+        $body->setEntries([
+            new ManualEntryItemBody(),
+        ]);
+
+        $this->runListRequest('getManualEntriesList', $responseBodyClass, [], $query);
+        $this->runRequest('postManualEntry', $responseBodyClass, [$body]);
+
+        $responseBodyClass = NextReferenceNumber::class;
+        $this->runRequest('getNextReferenceNumber', $responseBodyClass, []);
+
+        $responseBodyClass = ManualEntryFile::class;
+        $query = new ManualEntryFilesRequestQuery();
+        $body = new ManualEntryFileBody();
+
+        $this->runListRequest('getManualEntryFilesList', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_INT], $query);
+        $this->runRequest('postManualEntryFile', $responseBodyClass, [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_INT, $body]);
+
+        $responseBodyClass = ManualEntryFileData::class;
+        $parameters = [self::REQUEST_PARAM_INT, self::REQUEST_PARAM_INT, self::REQUEST_PARAM_INT];
+        $this->runRequest('getManualEntryFile', $responseBodyClass, $parameters);
+        $this->runRequest('deleteManualEntryFile', Success::class, $parameters);
     }
 
     public function testJournalEntry()

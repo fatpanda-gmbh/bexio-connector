@@ -16,8 +16,14 @@ use Fatpanda\BexioConnector\Request\Accounting\Currencies\CreateCurrencyRequest;
 use Fatpanda\BexioConnector\Request\Accounting\Currencies\DeleteCurrencyRequest;
 use Fatpanda\BexioConnector\Request\Accounting\Currencies\ListCurrenciesRequest;
 use Fatpanda\BexioConnector\Request\Accounting\Currencies\ListExchangeRatesRequest;
-use Fatpanda\BexioConnector\Request\Accounting\Currencies\SearchCurrenciesRequest;
 use Fatpanda\BexioConnector\Request\Accounting\Currencies\ShowCurrencyRequest;
+use Fatpanda\BexioConnector\Request\Accounting\ManualEntries\CreateManualEntryFileRequest;
+use Fatpanda\BexioConnector\Request\Accounting\ManualEntries\CreateManualEntryRequest;
+use Fatpanda\BexioConnector\Request\Accounting\ManualEntries\DeleteManualEntryFileRequest;
+use Fatpanda\BexioConnector\Request\Accounting\ManualEntries\ListManualEntriesRequest;
+use Fatpanda\BexioConnector\Request\Accounting\ManualEntries\ListManualEntryFilesRequest;
+use Fatpanda\BexioConnector\Request\Accounting\ManualEntries\ShowManualEntryFileRequest;
+use Fatpanda\BexioConnector\Request\Accounting\ManualEntries\ShowNextReferenceNumberRequest;
 use Fatpanda\BexioConnector\Request\Accounting\Reports\ListJournalEntriesRequest;
 use Fatpanda\BexioConnector\Request\Accounting\Taxes\DeleteTaxRequest;
 use Fatpanda\BexioConnector\Request\Accounting\Taxes\ListTaxesRequest;
@@ -234,6 +240,8 @@ use Fatpanda\BexioConnector\RequestBody\Accounting\Accounts\AccountsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Accounting\CalendarYears\CalendarYearBody;
 use Fatpanda\BexioConnector\RequestBody\Accounting\CalendarYears\CalendarYearsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Accounting\Currencies\CurrencyBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\ManualEntries\ManualEntryBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\ManualEntries\ManualEntryFileBody;
 use Fatpanda\BexioConnector\RequestBody\Banking\IBANPayments\IBANPaymentBody;
 use Fatpanda\BexioConnector\RequestBody\Banking\ISPayments\ISPaymentBody;
 use Fatpanda\BexioConnector\RequestBody\Banking\ISRPayments\ISRPaymentBody;
@@ -298,6 +306,8 @@ use Fatpanda\BexioConnector\RequestQuery\Accounting\BusinessYearsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\CalendarYearsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\CurrenciesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\JournalEntriesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\ManualEntriesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Accounting\ManualEntryFilesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\TaxesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Accounting\VatPeriodsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Banking\BankAccountsRequestQuery;
@@ -603,6 +613,99 @@ class BexioConnector
     {
         $this->pathParameters['currency_id'] = $currencyId;
         $request = new ListExchangeRatesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Accounting\ManualEntries
+
+    /**
+     * @param ManualEntriesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getManualEntriesList(?ManualEntriesRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListManualEntriesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param ManualEntryBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postManualEntry(ManualEntryBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateManualEntryRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getNextReferenceNumber(): Response
+    {
+        $request = new ShowNextReferenceNumberRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $manualEntryId
+     * @param int $entryId
+     * @param ManualEntryFilesRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getManualEntryFilesList(int $manualEntryId, int $entryId, ?ManualEntryFilesRequestQuery $query = null): Response
+    {
+        $this->pathParameters['manual_entry_id'] = $manualEntryId;
+        $this->pathParameters['entry_id'] = $entryId;
+        $this->query = $query;
+        $request = new ListManualEntryFilesRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $manualEntryId
+     * @param int $entryId
+     * @param ManualEntryFileBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postManualEntryFile(int $manualEntryId, int $entryId, ManualEntryFileBody $body): Response
+    {
+        $this->pathParameters['manual_entry_id'] = $manualEntryId;
+        $this->pathParameters['entry_id'] = $entryId;
+        $this->body = $body;
+        $request = new CreateManualEntryFileRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $manualEntryId
+     * @param int $entryId
+     * @param int $fileId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getManualEntryFile(int $manualEntryId, int $entryId, int $fileId): Response
+    {
+        $this->pathParameters['manual_entry_id'] = $manualEntryId;
+        $this->pathParameters['entry_id'] = $entryId;
+        $this->pathParameters['file_id'] = $fileId;
+        $request = new ShowManualEntryFileRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $manualEntryId
+     * @param int $entryId
+     * @param int $fileId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteManualEntryFile(int $manualEntryId, int $entryId, int $fileId): Response
+    {
+        $this->pathParameters['manual_entry_id'] = $manualEntryId;
+        $this->pathParameters['entry_id'] = $entryId;
+        $this->pathParameters['file_id'] = $fileId;
+        $request = new DeleteManualEntryFileRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
