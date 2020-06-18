@@ -33,9 +33,11 @@ use Fatpanda\BexioConnector\Container\Items\StockArea;
 use Fatpanda\BexioConnector\Container\Items\StockLocation;
 use Fatpanda\BexioConnector\Container\Other\Company;
 use Fatpanda\BexioConnector\Container\Other\Country;
+use Fatpanda\BexioConnector\Container\Other\FictionalUser;
 use Fatpanda\BexioConnector\Container\Other\Language;
 use Fatpanda\BexioConnector\Container\Other\Note;
 use Fatpanda\BexioConnector\Container\Other\PaymentType;
+use Fatpanda\BexioConnector\Container\Other\Permissions;
 use Fatpanda\BexioConnector\Container\Other\Task;
 use Fatpanda\BexioConnector\Container\Other\TaskPriority;
 use Fatpanda\BexioConnector\Container\Other\TaskStatus;
@@ -106,6 +108,7 @@ use Fatpanda\BexioConnector\RequestBody\Other\Tasks\TaskBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Tasks\TasksSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Units\UnitBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Units\UnitsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Users\FictionalUserBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\BusinessActivities\BusinessActivitiesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\BusinessActivities\BusinessActivityBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\CommunicationTypes\CommunicationTypesSearchBody;
@@ -159,6 +162,7 @@ use Fatpanda\BexioConnector\RequestQuery\Items\ItemsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Items\StockAreasRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Items\StockLocationsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\CountriesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Other\FictionalUsersRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\LanguagesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\NotesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\PaymentTypesRequestQuery;
@@ -651,6 +655,13 @@ class BexioConnectorTest extends TestCase
         $this->runListRequest('postSearchPaymentTypes', $responseBodyClass, [$searchBody], $query);
     }
 
+    public function testPermissions()
+    {
+        $responseBodyClass = Permissions::class;
+
+        $this->runRequest('getPermissions', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+    }
+
     public function testTask()
     {
         $responseBodyClass = Task::class;
@@ -694,6 +705,16 @@ class BexioConnectorTest extends TestCase
 
         $this->runListRequest('getUsersList', $responseBodyClass, [], $query);
         $this->runRequest('getUser', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+
+        $responseBodyClass = FictionalUser::class;
+        $query = new FictionalUsersRequestQuery();
+        $body = new FictionalUserBody();
+
+        $this->runListRequest('getFictionalUsersList', $responseBodyClass, [], $query);
+        $this->runRequest('postFictionalUser', $responseBodyClass, [$body]);
+        $this->runRequest('getFictionalUser', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('patchFictionalUser', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteFictionalUser', Success::class, [self::REQUEST_PARAM_INT]);
     }
 
     public function testDefaultPosition()

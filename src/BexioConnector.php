@@ -111,6 +111,7 @@ use Fatpanda\BexioConnector\Request\Other\Notes\SearchNotesRequest;
 use Fatpanda\BexioConnector\Request\Other\Notes\ShowNoteRequest;
 use Fatpanda\BexioConnector\Request\Other\PaymentTypes\ListPaymentTypesRequest;
 use Fatpanda\BexioConnector\Request\Other\PaymentTypes\SearchPaymentTypesRequest;
+use Fatpanda\BexioConnector\Request\Other\Permissions\ShowPermissionsRequest;
 use Fatpanda\BexioConnector\Request\Other\Tasks\CreateTaskRequest;
 use Fatpanda\BexioConnector\Request\Other\Tasks\DeleteTaskRequest;
 use Fatpanda\BexioConnector\Request\Other\Tasks\EditTaskRequest;
@@ -125,8 +126,13 @@ use Fatpanda\BexioConnector\Request\Other\Units\EditUnitRequest;
 use Fatpanda\BexioConnector\Request\Other\Units\ListUnitsRequest;
 use Fatpanda\BexioConnector\Request\Other\Units\SearchUnitsRequest;
 use Fatpanda\BexioConnector\Request\Other\Units\ShowUnitRequest;
+use Fatpanda\BexioConnector\Request\Other\Users\CreateFictionalUserRequest;
+use Fatpanda\BexioConnector\Request\Other\Users\DeleteFictionalUserRequest;
+use Fatpanda\BexioConnector\Request\Other\Users\ListFictionalUsersRequest;
 use Fatpanda\BexioConnector\Request\Other\Users\ListUsersRequest;
+use Fatpanda\BexioConnector\Request\Other\Users\ShowFictionalUserRequest;
 use Fatpanda\BexioConnector\Request\Other\Users\ShowUserRequest;
+use Fatpanda\BexioConnector\Request\Other\Users\UpdateFictionalUserRequest;
 use Fatpanda\BexioConnector\Request\Projects\BusinessActivities\CreateBusinessActivityRequest;
 use Fatpanda\BexioConnector\Request\Projects\BusinessActivities\ListBusinessActivitiesRequest;
 use Fatpanda\BexioConnector\Request\Projects\BusinessActivities\SearchBusinessActivitiesRequest;
@@ -283,6 +289,7 @@ use Fatpanda\BexioConnector\RequestBody\Other\Tasks\TaskBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Tasks\TasksSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Units\UnitBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Units\UnitsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Other\Users\FictionalUserBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\BusinessActivities\BusinessActivitiesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\BusinessActivities\BusinessActivityBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\CommunicationTypes\CommunicationTypesSearchBody;
@@ -337,6 +344,7 @@ use Fatpanda\BexioConnector\RequestQuery\Items\ItemsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Items\StockAreasRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Items\StockLocationsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\CountriesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Other\FictionalUsersRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\LanguagesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\NotesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\PaymentTypesRequestQuery;
@@ -1813,6 +1821,17 @@ class BexioConnector
         return $request->execute();
     }
 
+    // Other\Permissions
+
+    /**
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getPermissions(): Response
+    {
+        $request = new ShowPermissionsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
     // Other\Tasks
 
     /**
@@ -2000,6 +2019,63 @@ class BexioConnector
     {
         $this->pathParameters['user_id'] = $userId;
         $request = new ShowUserRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param FictionalUsersRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getFictionalUsersList(?FictionalUsersRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListFictionalUsersRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param FictionalUserBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postFictionalUser(FictionalUserBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateFictionalUserRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $fictionalUserId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getFictionalUser(int $fictionalUserId): Response
+    {
+        $this->pathParameters['fictional_user_id'] = $fictionalUserId;
+        $request = new ShowFictionalUserRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $fictionalUserId
+     * @param FictionalUserBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function patchFictionalUser(int $fictionalUserId, FictionalUserBody $body): Response
+    {
+        $this->pathParameters['fictional_user_id'] = $fictionalUserId;
+        $this->body = $body;
+        $request = new UpdateFictionalUserRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $fictionalUserId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteFictionalUser(int $fictionalUserId): Response
+    {
+        $this->pathParameters['fictional_user_id'] = $fictionalUserId;
+        $request = new DeleteFictionalUserRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 

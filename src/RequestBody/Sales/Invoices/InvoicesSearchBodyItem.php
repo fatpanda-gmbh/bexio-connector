@@ -10,6 +10,7 @@ class InvoicesSearchBodyItem extends AbstractSearchBodyItem
     public const SEARCH_FIELD_KB_ITEM_STATUS_ID = 'kb_item_status_id';
     public const SEARCH_FIELD_DOCUMENT_NR = 'document_nr';
     public const SEARCH_FIELD_TITLE = 'title';
+    public const SEARCH_FIELD_API_REFERENCE = 'api_reference';
     public const SEARCH_FIELD_CONTACT_ID = 'contact_id';
     public const SEARCH_FIELD_CONTACT_SUB_ID = 'contact_sub_id';
     public const SEARCH_FIELD_USER_ID = 'user_id';
