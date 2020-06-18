@@ -28,6 +28,9 @@ use Fatpanda\BexioConnector\Container\Contacts\ContactRelation;
 use Fatpanda\BexioConnector\Container\Contacts\ContactSector;
 use Fatpanda\BexioConnector\Container\Contacts\Salutation;
 use Fatpanda\BexioConnector\Container\Contacts\Title;
+use Fatpanda\BexioConnector\Container\Items\Item;
+use Fatpanda\BexioConnector\Container\Items\StockArea;
+use Fatpanda\BexioConnector\Container\Items\StockLocation;
 use Fatpanda\BexioConnector\Container\Other\Company;
 use Fatpanda\BexioConnector\Container\Other\Country;
 use Fatpanda\BexioConnector\Container\Other\Language;
@@ -89,6 +92,10 @@ use Fatpanda\BexioConnector\RequestBody\Contacts\Salutations\SalutationsSearchBo
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactSectors\ContactSectorsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Titles\TitlesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Titles\TitleBody;
+use Fatpanda\BexioConnector\RequestBody\Items\Items\ItemBody;
+use Fatpanda\BexioConnector\RequestBody\Items\Items\ItemsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Items\StockAreas\StockAreasSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Items\StockLocations\StockLocationsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Countries\CountriesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Countries\CountryBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Languages\LanguagesSearchBody;
@@ -148,6 +155,9 @@ use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactSectorsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\SalutationsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\TitlesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Items\ItemsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Items\StockAreasRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Items\StockLocationsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\CountriesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\LanguagesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\NotesRequestQuery;
@@ -546,6 +556,41 @@ class BexioConnectorTest extends TestCase
 
         $this->runListRequest('getCommunicationTypesList', $responseBodyClass, [], $query);
         $this->runListRequest('postSearchCommunicationTypes', $responseBodyClass, [$searchBody], $query);
+    }
+
+    public function testItem()
+    {
+        $responseBodyClass = Item::class;
+        $query = new ItemsRequestQuery();
+        $body = new ItemBody();
+        $searchBody = new ItemsSearchBody();
+
+        $this->runListRequest('getItemsList', $responseBodyClass, [], $query);
+        $this->runRequest('postItem', $responseBodyClass, [$body]);
+        $this->runListRequest('postSearchItems', $responseBodyClass, [$searchBody], $query);
+        $this->runRequest('getItem', $responseBodyClass, [self::REQUEST_PARAM_INT]);
+        $this->runRequest('putItem', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
+        $this->runRequest('deleteItem', Success::class, [self::REQUEST_PARAM_INT]);
+    }
+
+    public function testStockLocation()
+    {
+        $responseBodyClass = StockLocation::class;
+        $query = new StockLocationsRequestQuery();
+        $searchBody = new StockLocationsSearchBody();
+
+        $this->runListRequest('getStockLocationsList', $responseBodyClass, [], $query);
+        $this->runListRequest('postSearchStockLocations', $responseBodyClass, [$searchBody], $query);
+    }
+
+    public function testStockArea()
+    {
+        $responseBodyClass = StockArea::class;
+        $query = new StockAreasRequestQuery();
+        $searchBody = new StockAreasSearchBody();
+
+        $this->runListRequest('getStockAreasList', $responseBodyClass, [], $query);
+        $this->runListRequest('postSearchStockAreas', $responseBodyClass, [$searchBody], $query);
     }
 
     public function testCompany()

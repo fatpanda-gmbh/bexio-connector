@@ -83,6 +83,16 @@ use Fatpanda\BexioConnector\Request\Contacts\Titles\EditTitleRequest;
 use Fatpanda\BexioConnector\Request\Contacts\Titles\ListTitlesRequest;
 use Fatpanda\BexioConnector\Request\Contacts\Titles\SearchTitlesRequest;
 use Fatpanda\BexioConnector\Request\Contacts\Titles\ShowTitleRequest;
+use Fatpanda\BexioConnector\Request\Items\Items\CreateItemRequest;
+use Fatpanda\BexioConnector\Request\Items\Items\DeleteItemRequest;
+use Fatpanda\BexioConnector\Request\Items\Items\EditItemRequest;
+use Fatpanda\BexioConnector\Request\Items\Items\ListItemsRequest;
+use Fatpanda\BexioConnector\Request\Items\Items\SearchItemsRequest;
+use Fatpanda\BexioConnector\Request\Items\Items\ShowItemRequest;
+use Fatpanda\BexioConnector\Request\Items\StockAreas\ListStockAreasRequest;
+use Fatpanda\BexioConnector\Request\Items\StockAreas\SearchStockAreasRequest;
+use Fatpanda\BexioConnector\Request\Items\StockLocations\ListStockLocationsRequest;
+use Fatpanda\BexioConnector\Request\Items\StockLocations\SearchStockLocationsRequest;
 use Fatpanda\BexioConnector\Request\Other\Companies\ListCompaniesRequest;
 use Fatpanda\BexioConnector\Request\Other\Companies\ShowCompanyRequest;
 use Fatpanda\BexioConnector\Request\Other\Countries\CreateCountryRequest;
@@ -259,6 +269,10 @@ use Fatpanda\BexioConnector\RequestBody\Contacts\Salutations\SalutationsSearchBo
 use Fatpanda\BexioConnector\RequestBody\Contacts\ContactSectors\ContactSectorsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Titles\TitlesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Contacts\Titles\TitleBody;
+use Fatpanda\BexioConnector\RequestBody\Items\Items\ItemBody;
+use Fatpanda\BexioConnector\RequestBody\Items\Items\ItemsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Items\StockAreas\StockAreasSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Items\StockLocations\StockLocationsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Countries\CountriesSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Countries\CountryBody;
 use Fatpanda\BexioConnector\RequestBody\Other\Languages\LanguagesSearchBody;
@@ -319,6 +333,9 @@ use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactSectorsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\ContactsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\SalutationsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Contacts\TitlesRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Items\ItemsRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Items\StockAreasRequestQuery;
+use Fatpanda\BexioConnector\RequestQuery\Items\StockLocationsRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\CountriesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\LanguagesRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\Other\NotesRequestQuery;
@@ -1449,6 +1466,131 @@ class BexioConnector
     {
         $this->pathParameters['title_id'] = $titleId;
         $request = new DeleteTitleRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Items
+    // Items\Items
+
+    /**
+     * @param ItemsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getItemsList(?ItemsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListItemsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param ItemBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postItem(ItemBody $body): Response
+    {
+        $this->body = $body;
+        $request = new CreateItemRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param ItemsSearchBody $body
+     * @param ItemsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchItems(ItemsSearchBody $body, ?ItemsRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchItemsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $itemId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getItem(int $itemId): Response
+    {
+        $this->pathParameters['item_id'] = $itemId;
+        $request = new ShowItemRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $itemId
+     * @param ItemBody $body
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function putItem(int $itemId, ItemBody $body): Response
+    {
+        $this->pathParameters['item_id'] = $itemId;
+        $this->body = $body;
+        $request = new EditItemRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param int $itemId
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function deleteItem(int $itemId): Response
+    {
+        $this->pathParameters['item_id'] = $itemId;
+        $request = new DeleteItemRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Items\StockLocations
+
+    /**
+     * @param StockLocationsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getStockLocationsList(?StockLocationsRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListStockLocationsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param StockLocationsSearchBody $body
+     * @param StockLocationsRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchStockLocations(StockLocationsSearchBody $body, ?StockLocationsRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchStockLocationsRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    // Items\StockAreas
+
+    /**
+     * @param StockAreasRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function getStockAreasList(?StockAreasRequestQuery $query = null): Response
+    {
+        $this->query = $query;
+        $request = new ListStockAreasRequest(...$this->getRequestParameters());
+        return $request->execute();
+    }
+
+    /**
+     * @param StockAreasSearchBody $body
+     * @param StockAreasRequestQuery|null $query
+     * @return Response|SuccessResponse|ErrorResponse
+     */
+    public function postSearchStockAreas(StockAreasSearchBody $body, ?StockAreasRequestQuery $query = null): Response
+    {
+        $this->body = $body;
+        $this->query = $query;
+        $request = new SearchStockAreasRequest(...$this->getRequestParameters());
         return $request->execute();
     }
 
