@@ -61,7 +61,7 @@ class ManualEntryItem implements ContainerInterface
     /**
      * @var float
      * @SerializedName("amount")
-     * @Type("number")
+     * @Type("float")
      */
     protected $amount;
 
@@ -82,14 +82,14 @@ class ManualEntryItem implements ContainerInterface
     /**
      * @var float
      * @SerializedName("currency_factor")
-     * @Type("number")
+     * @Type("float")
      */
     protected $currencyFactor;
 
     /**
      * @var float
      * @SerializedName("base_currency_amount")
-     * @Type("number")
+     * @Type("float")
      */
     protected $baseCurrencyAmount;
 

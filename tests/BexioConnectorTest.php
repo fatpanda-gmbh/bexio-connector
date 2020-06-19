@@ -69,6 +69,7 @@ use Fatpanda\BexioConnector\Container\Sales\SubtotalPosition;
 use Fatpanda\BexioConnector\Container\Sales\TextPosition;
 use Fatpanda\BexioConnector\Container\Success;
 use Fatpanda\BexioConnector\RequestBody\Accounting\Accounts\AccountsSearchBody;
+use Fatpanda\BexioConnector\RequestBody\Accounting\Accounts\AccountsSearchBodyItem;
 use Fatpanda\BexioConnector\RequestBody\Accounting\CalendarYears\CalendarYearBody;
 use Fatpanda\BexioConnector\RequestBody\Accounting\CalendarYears\CalendarYearsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Accounting\Currencies\CurrencyBody;
@@ -215,6 +216,13 @@ class BexioConnectorTest extends TestCase
         $responseBodyClass = Account::class;
         $query = new AccountsRequestQuery();
         $searchBody = new AccountsSearchBody();
+        /** @var AccountsSearchBodyItem $item */
+        $item = $searchBody->createItem();
+        $item
+            ->setField($item::SEARCH_FIELD_ACCOUNT_NO)
+            ->setCriteria($item::SEARCH_CRITERIA_LIKE)
+            ->setValue(1)
+        ;
 
         $this->runListRequest('getAccountsList', $responseBodyClass, [], $query);
         $this->runListRequest('postSearchAccounts', $responseBodyClass, [self::REQUEST_PARAM_INT, $searchBody], $query);

@@ -58,14 +58,6 @@ class AdditionalAddressBody extends AbstractBody
     protected $description;
 
     /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
      * @param string $name
      * @return AdditionalAddressBody
      */
@@ -73,14 +65,6 @@ class AdditionalAddressBody extends AbstractBody
     {
         $this->name = $name;
         return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getAddress(): ?string
-    {
-        return $this->address;
     }
 
     /**
@@ -94,14 +78,6 @@ class AdditionalAddressBody extends AbstractBody
     }
 
     /**
-     * @return string|null
-     */
-    public function getPostcode(): ?string
-    {
-        return $this->postcode;
-    }
-
-    /**
      * @param string|null $postcode
      * @return AdditionalAddressBody
      */
@@ -109,14 +85,6 @@ class AdditionalAddressBody extends AbstractBody
     {
         $this->postcode = $postcode;
         return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getCity(): ?string
-    {
-        return $this->city;
     }
 
     /**
@@ -130,14 +98,6 @@ class AdditionalAddressBody extends AbstractBody
     }
 
     /**
-     * @return int|null
-     */
-    public function getCountryId(): ?int
-    {
-        return $this->countryId;
-    }
-
-    /**
      * @param int|null $countryId
      * @return AdditionalAddressBody
      */
@@ -148,14 +108,6 @@ class AdditionalAddressBody extends AbstractBody
     }
 
     /**
-     * @return string
-     */
-    public function getSubject(): string
-    {
-        return $this->subject;
-    }
-
-    /**
      * @param string $subject
      * @return AdditionalAddressBody
      */
@@ -163,14 +115,6 @@ class AdditionalAddressBody extends AbstractBody
     {
         $this->subject = $subject;
         return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
     }
 
     /**

@@ -26,7 +26,7 @@ class Task implements ContainerInterface
     /**
      * @var DateTime|null
      * @SerializedName("finish_date")
-     * @Type("DateTime<'Y-m-d H:i:s'>")
+     * @Type("DateTime<'Y-m-d\TH:i:sP'>")
      */
     protected $finishDate;
 

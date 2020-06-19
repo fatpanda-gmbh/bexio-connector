@@ -61,7 +61,7 @@ abstract class AbstractBankPayment implements ContainerInterface
     /**
      * @var DateTime
      * @SerializedName("created_at")
-     * @Type("DateTime<'Y-m-d H:i:s'>")
+     * @Type("DateTime<'Y-m-d\TH:i:sP'>")
      */
     protected $createdAt;
 

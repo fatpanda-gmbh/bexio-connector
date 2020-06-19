@@ -25,7 +25,7 @@ class Currency implements ContainerInterface
     /**
      * @var float
      * @SerializedName("round_factor")
-     * @Type("number")
+     * @Type("float")
      */
     protected $roundFactor;
 

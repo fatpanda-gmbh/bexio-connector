@@ -74,28 +74,28 @@ class ItemBody extends AbstractBody
     /**
      * @var float|null
      * @SerializedName("purchase_price")
-     * @Type("number")
+     * @Type("float")
      */
     protected $purchasePrice;
 
     /**
      * @var float|null
      * @SerializedName("sale_price")
-     * @Type("number")
+     * @Type("float")
      */
     protected $salePrice;
 
     /**
      * @var float|null
      * @SerializedName("purchase_total")
-     * @Type("number")
+     * @Type("float")
      */
     protected $purchaseTotal;
 
     /**
      * @var float|null
      * @SerializedName("sale_total")
-     * @Type("number")
+     * @Type("float")
      */
     protected $saleTotal;
 
@@ -214,7 +214,7 @@ class ItemBody extends AbstractBody
     /**
      * @var float|null
      * @SerializedName("delivery_price")
-     * @Type("number")
+     * @Type("float")
      */
     protected $deliveryPrice;
 
@@ -226,14 +226,6 @@ class ItemBody extends AbstractBody
     protected $articleGroupId;
 
     /**
-     * @return int
-     */
-    public function getUserId(): int
-    {
-        return $this->userId;
-    }
-
-    /**
      * @param int $userId
      * @return ItemBody
      */
@@ -241,14 +233,6 @@ class ItemBody extends AbstractBody
     {
         $this->userId = $userId;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getArticleTypeId(): int
-    {
-        return $this->articleTypeId;
     }
 
     /**
@@ -262,14 +246,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return int|null
-     */
-    public function getContactId(): ?int
-    {
-        return $this->contactId;
-    }
-
-    /**
      * @param int|null $contactId
      * @return ItemBody
      */
@@ -277,14 +253,6 @@ class ItemBody extends AbstractBody
     {
         $this->contactId = $contactId;
         return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDelivererCode(): ?string
-    {
-        return $this->delivererCode;
     }
 
     /**
@@ -298,14 +266,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return string|null
-     */
-    public function getDelivererName(): ?string
-    {
-        return $this->delivererName;
-    }
-
-    /**
      * @param string|null $delivererName
      * @return ItemBody
      */
@@ -313,14 +273,6 @@ class ItemBody extends AbstractBody
     {
         $this->delivererName = $delivererName;
         return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDelivererDescription(): ?string
-    {
-        return $this->delivererDescription;
     }
 
     /**
@@ -334,14 +286,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return string
-     */
-    public function getInternCode(): string
-    {
-        return $this->internCode;
-    }
-
-    /**
      * @param string $internCode
      * @return ItemBody
      */
@@ -349,14 +293,6 @@ class ItemBody extends AbstractBody
     {
         $this->internCode = $internCode;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInternName(): string
-    {
-        return $this->internName;
     }
 
     /**
@@ -370,14 +306,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return string|null
-     */
-    public function getInternDescription(): ?string
-    {
-        return $this->internDescription;
-    }
-
-    /**
      * @param string|null $internDescription
      * @return ItemBody
      */
@@ -385,14 +313,6 @@ class ItemBody extends AbstractBody
     {
         $this->internDescription = $internDescription;
         return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getPurchasePrice(): ?float
-    {
-        return $this->purchasePrice;
     }
 
     /**
@@ -406,14 +326,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return float|null
-     */
-    public function getSalePrice(): ?float
-    {
-        return $this->salePrice;
-    }
-
-    /**
      * @param float|null $salePrice
      * @return ItemBody
      */
@@ -421,14 +333,6 @@ class ItemBody extends AbstractBody
     {
         $this->salePrice = $salePrice;
         return $this;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getPurchaseTotal(): ?float
-    {
-        return $this->purchaseTotal;
     }
 
     /**
@@ -442,14 +346,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return float|null
-     */
-    public function getSaleTotal(): ?float
-    {
-        return $this->saleTotal;
-    }
-
-    /**
      * @param float|null $saleTotal
      * @return ItemBody
      */
@@ -457,14 +353,6 @@ class ItemBody extends AbstractBody
     {
         $this->saleTotal = $saleTotal;
         return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getCurrencyId(): ?int
-    {
-        return $this->currencyId;
     }
 
     /**
@@ -478,14 +366,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return int|null
-     */
-    public function getTaxIncomeId(): ?int
-    {
-        return $this->taxIncomeId;
-    }
-
-    /**
      * @param int|null $taxIncomeId
      * @return ItemBody
      */
@@ -493,14 +373,6 @@ class ItemBody extends AbstractBody
     {
         $this->taxIncomeId = $taxIncomeId;
         return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getTaxId(): ?int
-    {
-        return $this->taxId;
     }
 
     /**
@@ -514,14 +386,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return int|null
-     */
-    public function getTaxExpenseId(): ?int
-    {
-        return $this->taxExpenseId;
-    }
-
-    /**
      * @param int|null $taxExpenseId
      * @return ItemBody
      */
@@ -529,14 +393,6 @@ class ItemBody extends AbstractBody
     {
         $this->taxExpenseId = $taxExpenseId;
         return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getUnitId(): ?int
-    {
-        return $this->unitId;
     }
 
     /**
@@ -550,14 +406,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return bool
-     */
-    public function isStock(): bool
-    {
-        return $this->isStock;
-    }
-
-    /**
      * @param bool $isStock
      * @return ItemBody
      */
@@ -565,14 +413,6 @@ class ItemBody extends AbstractBody
     {
         $this->isStock = $isStock;
         return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getStockId(): ?int
-    {
-        return $this->stockId;
     }
 
     /**
@@ -586,14 +426,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return int|null
-     */
-    public function getStockPlaceId(): ?int
-    {
-        return $this->stockPlaceId;
-    }
-
-    /**
      * @param int|null $stockPlaceId
      * @return ItemBody
      */
@@ -601,14 +433,6 @@ class ItemBody extends AbstractBody
     {
         $this->stockPlaceId = $stockPlaceId;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStockNr(): int
-    {
-        return $this->stockNr;
     }
 
     /**
@@ -622,14 +446,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return int
-     */
-    public function getStockMinNr(): int
-    {
-        return $this->stockMinNr;
-    }
-
-    /**
      * @param int $stockMinNr
      * @return ItemBody
      */
@@ -637,14 +453,6 @@ class ItemBody extends AbstractBody
     {
         $this->stockMinNr = $stockMinNr;
         return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getWidth(): ?int
-    {
-        return $this->width;
     }
 
     /**
@@ -658,14 +466,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return int|null
-     */
-    public function getHeight(): ?int
-    {
-        return $this->height;
-    }
-
-    /**
      * @param int|null $height
      * @return ItemBody
      */
@@ -673,14 +473,6 @@ class ItemBody extends AbstractBody
     {
         $this->height = $height;
         return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getWeight(): ?int
-    {
-        return $this->weight;
     }
 
     /**
@@ -694,14 +486,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return int|null
-     */
-    public function getVolume(): ?int
-    {
-        return $this->volume;
-    }
-
-    /**
      * @param int|null $volume
      * @return ItemBody
      */
@@ -709,14 +493,6 @@ class ItemBody extends AbstractBody
     {
         $this->volume = $volume;
         return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getHtmlText(): ?string
-    {
-        return $this->htmlText;
     }
 
     /**
@@ -730,14 +506,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return string|null
-     */
-    public function getRemarks(): ?string
-    {
-        return $this->remarks;
-    }
-
-    /**
      * @param string|null $remarks
      * @return ItemBody
      */
@@ -748,14 +516,6 @@ class ItemBody extends AbstractBody
     }
 
     /**
-     * @return float|null
-     */
-    public function getDeliveryPrice(): ?float
-    {
-        return $this->deliveryPrice;
-    }
-
-    /**
      * @param float|null $deliveryPrice
      * @return ItemBody
      */
@@ -763,14 +523,6 @@ class ItemBody extends AbstractBody
     {
         $this->deliveryPrice = $deliveryPrice;
         return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getArticleGroupId(): ?int
-    {
-        return $this->articleGroupId;
     }
 
     /**

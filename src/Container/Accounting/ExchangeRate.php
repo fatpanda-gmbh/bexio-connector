@@ -11,7 +11,7 @@ class ExchangeRate implements ContainerInterface
     /**
      * @var float
      * @SerializedName("factor_nr")
-     * @Type("number")
+     * @Type("float")
      */
     protected $factorNr;
 

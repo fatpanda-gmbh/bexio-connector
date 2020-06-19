@@ -82,7 +82,7 @@ class ManualEntryFile implements ContainerInterface
     /**
      * @var DateTime
      * @SerializedName("created_at")
-     * @Type("DateTime<'Y-m-d'>")
+     * @Type("DateTime<'Y-m-d\TH:i:sP'>")
      */
     protected $createdAt;
 

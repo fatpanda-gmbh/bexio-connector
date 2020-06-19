@@ -9,13 +9,6 @@ use JMS\Serializer\Annotation\Type;
 class CurrencyBody extends AbstractBody
 {
     /**
-     * @var integer
-     * @SerializedName("id")
-     * @Type("integer")
-     */
-    protected $id;
-
-    /**
      * @var string
      * @SerializedName("name")
      * @Type("string")
@@ -25,31 +18,27 @@ class CurrencyBody extends AbstractBody
     /**
      * @var float
      * @SerializedName("round_factor")
-     * @Type("number")
+     * @Type("float")
      */
     protected $round_factor;
 
     /**
-     * @return int
+     * @param string $name
+     * @return CurrencyBody
      */
-    public function getId(): int
+    public function setName(string $name): CurrencyBody
     {
-        return $this->id;
+        $this->name = $name;
+        return $this;
     }
 
     /**
-     * @return string
+     * @param float $round_factor
+     * @return CurrencyBody
      */
-    public function getName(): string
+    public function setRoundFactor(float $round_factor): CurrencyBody
     {
-        return $this->name;
-    }
-
-    /**
-     * @return float
-     */
-    public function getRoundFactor(): float
-    {
-        return $this->round_factor;
+        $this->round_factor = $round_factor;
+        return $this;
     }
 }

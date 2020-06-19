@@ -2,7 +2,6 @@
 
 namespace Fatpanda\BexioConnector\RequestBody\Sales\Comments;
 
-use DateTime;
 use Fatpanda\BexioConnector\RequestBody\AbstractBody;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;

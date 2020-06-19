@@ -171,14 +171,6 @@ class QuoteBody extends AbstractBody
     protected $positions = [];
 
     /**
-     * @return string|null
-     */
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    /**
      * @param string|null $title
      * @return QuoteBody
      */
@@ -186,14 +178,6 @@ class QuoteBody extends AbstractBody
     {
         $this->title = $title;
         return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getContactId(): ?int
-    {
-        return $this->contactId;
     }
 
     /**
@@ -207,14 +191,6 @@ class QuoteBody extends AbstractBody
     }
 
     /**
-     * @return int|null
-     */
-    public function getContactSubId(): ?int
-    {
-        return $this->contactSubId;
-    }
-
-    /**
      * @param int|null $contactSubId
      * @return QuoteBody
      */
@@ -222,14 +198,6 @@ class QuoteBody extends AbstractBody
     {
         $this->contactSubId = $contactSubId;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserId(): int
-    {
-        return $this->userId;
     }
 
     /**
@@ -243,14 +211,6 @@ class QuoteBody extends AbstractBody
     }
 
     /**
-     * @return int|null
-     */
-    public function getPrProjectId(): ?int
-    {
-        return $this->prProjectId;
-    }
-
-    /**
      * @param int|null $prProjectId
      * @return QuoteBody
      */
@@ -258,14 +218,6 @@ class QuoteBody extends AbstractBody
     {
         $this->prProjectId = $prProjectId;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLogopaperId(): int
-    {
-        return $this->logopaperId;
     }
 
     /**
@@ -279,14 +231,6 @@ class QuoteBody extends AbstractBody
     }
 
     /**
-     * @return int
-     */
-    public function getLanguageId(): int
-    {
-        return $this->languageId;
-    }
-
-    /**
      * @param int $languageId
      * @return QuoteBody
      */
@@ -294,14 +238,6 @@ class QuoteBody extends AbstractBody
     {
         $this->languageId = $languageId;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getBankAccountId(): int
-    {
-        return $this->bankAccountId;
     }
 
     /**
@@ -315,14 +251,6 @@ class QuoteBody extends AbstractBody
     }
 
     /**
-     * @return int
-     */
-    public function getCurrencyId(): int
-    {
-        return $this->currencyId;
-    }
-
-    /**
      * @param int $currencyId
      * @return QuoteBody
      */
@@ -330,14 +258,6 @@ class QuoteBody extends AbstractBody
     {
         $this->currencyId = $currencyId;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPaymentTypeId(): int
-    {
-        return $this->paymentTypeId;
     }
 
     /**
@@ -351,14 +271,6 @@ class QuoteBody extends AbstractBody
     }
 
     /**
-     * @return string
-     */
-    public function getHeader(): string
-    {
-        return $this->header;
-    }
-
-    /**
      * @param string $header
      * @return QuoteBody
      */
@@ -366,14 +278,6 @@ class QuoteBody extends AbstractBody
     {
         $this->header = $header;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFooter(): string
-    {
-        return $this->footer;
     }
 
     /**
@@ -387,14 +291,6 @@ class QuoteBody extends AbstractBody
     }
 
     /**
-     * @return int
-     */
-    public function getMwstType(): int
-    {
-        return $this->mwstType;
-    }
-
-    /**
      * @param int $mwstType
      * @return QuoteBody
      */
@@ -402,14 +298,6 @@ class QuoteBody extends AbstractBody
     {
         $this->mwstType = $mwstType;
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isMwstIsNet(): bool
-    {
-        return $this->mwstIsNet;
     }
 
     /**
@@ -423,14 +311,6 @@ class QuoteBody extends AbstractBody
     }
 
     /**
-     * @return bool
-     */
-    public function isShowPositionTaxes(): bool
-    {
-        return $this->showPositionTaxes;
-    }
-
-    /**
      * @param bool $showPositionTaxes
      * @return QuoteBody
      */
@@ -438,14 +318,6 @@ class QuoteBody extends AbstractBody
     {
         $this->showPositionTaxes = $showPositionTaxes;
         return $this;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getIsValidFrom(): DateTime
-    {
-        return $this->isValidFrom;
     }
 
     /**
@@ -459,14 +331,6 @@ class QuoteBody extends AbstractBody
     }
 
     /**
-     * @return DateTime
-     */
-    public function getIsValidUntil(): DateTime
-    {
-        return $this->isValidUntil;
-    }
-
-    /**
      * @param DateTime $isValidUntil
      * @return QuoteBody
      */
@@ -474,14 +338,6 @@ class QuoteBody extends AbstractBody
     {
         $this->isValidUntil = $isValidUntil;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDeliveryAddressType(): int
-    {
-        return $this->deliveryAddressType;
     }
 
     /**
@@ -495,14 +351,6 @@ class QuoteBody extends AbstractBody
     }
 
     /**
-     * @return string|null
-     */
-    public function getApiReference(): ?string
-    {
-        return $this->apiReference;
-    }
-
-    /**
      * @param string|null $apiReference
      * @return QuoteBody
      */
@@ -510,14 +358,6 @@ class QuoteBody extends AbstractBody
     {
         $this->apiReference = $apiReference;
         return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getViewedByClientAt(): ?string
-    {
-        return $this->viewedByClientAt;
     }
 
     /**
@@ -531,14 +371,6 @@ class QuoteBody extends AbstractBody
     }
 
     /**
-     * @return int|null
-     */
-    public function getKbTermsOfPaymentTemplateId(): ?int
-    {
-        return $this->kbTermsOfPaymentTemplateId;
-    }
-
-    /**
      * @param int|null $kbTermsOfPaymentTemplateId
      * @return QuoteBody
      */
@@ -546,14 +378,6 @@ class QuoteBody extends AbstractBody
     {
         $this->kbTermsOfPaymentTemplateId = $kbTermsOfPaymentTemplateId;
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPositions(): array
-    {
-        return $this->positions;
     }
 
     /**

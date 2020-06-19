@@ -81,28 +81,28 @@ class Item implements ContainerInterface
     /**
      * @var float|null
      * @SerializedName("purchase_price")
-     * @Type("number")
+     * @Type("float")
      */
     protected $purchasePrice;
 
     /**
      * @var float|null
      * @SerializedName("sale_price")
-     * @Type("number")
+     * @Type("float")
      */
     protected $salePrice;
 
     /**
      * @var float|null
      * @SerializedName("purchase_total")
-     * @Type("number")
+     * @Type("float")
      */
     protected $purchaseTotal;
 
     /**
      * @var float|null
      * @SerializedName("sale_total")
-     * @Type("number")
+     * @Type("float")
      */
     protected $saleTotal;
 
@@ -256,7 +256,7 @@ class Item implements ContainerInterface
     /**
      * @var float|null
      * @SerializedName("delivery_price")
-     * @Type("number")
+     * @Type("float")
      */
     protected $deliveryPrice;
 

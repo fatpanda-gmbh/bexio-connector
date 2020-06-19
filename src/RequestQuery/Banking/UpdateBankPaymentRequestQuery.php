@@ -2,8 +2,6 @@
 
 namespace Fatpanda\BexioConnector\RequestQuery\Banking;
 
-use DateTime;
-use Fatpanda\BexioConnector\RequestQuery\LimitRequestQuery;
 use Fatpanda\BexioConnector\RequestQuery\RequestQueryInterface;
 
 class UpdateBankPaymentRequestQuery implements RequestQueryInterface

@@ -61,7 +61,7 @@ class JournalEntry implements ContainerInterface
     /**
      * @var float
      * @SerializedName("amount")
-     * @Type("number")
+     * @Type("float")
      */
     protected $amount;
 

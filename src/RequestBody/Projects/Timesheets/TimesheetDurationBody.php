@@ -31,26 +31,32 @@ class TimesheetDurationBody implements ContainerInterface
     protected $duration;
 
     /**
-     * @return string
+     * @param string $type
+     * @return TimesheetDurationBody
      */
-    public function getType(): string
+    public function setType(string $type): TimesheetDurationBody
     {
-        return $this->type;
+        $this->type = $type;
+        return $this;
     }
 
     /**
-     * @return DateTime
+     * @param DateTime $date
+     * @return TimesheetDurationBody
      */
-    public function getDate(): DateTime
+    public function setDate(DateTime $date): TimesheetDurationBody
     {
-        return $this->date;
+        $this->date = $date;
+        return $this;
     }
 
     /**
-     * @return string
+     * @param string $duration
+     * @return TimesheetDurationBody
      */
-    public function getDuration(): string
+    public function setDuration(string $duration): TimesheetDurationBody
     {
-        return $this->duration;
+        $this->duration = $duration;
+        return $this;
     }
 }

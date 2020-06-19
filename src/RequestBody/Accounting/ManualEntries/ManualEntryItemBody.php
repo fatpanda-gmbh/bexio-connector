@@ -46,7 +46,7 @@ class ManualEntryItemBody extends AbstractBody
     /**
      * @var float
      * @SerializedName("amount")
-     * @Type("number")
+     * @Type("float")
      */
     protected $amount;
 
@@ -60,7 +60,7 @@ class ManualEntryItemBody extends AbstractBody
     /**
      * @var float
      * @SerializedName("currency_factor")
-     * @Type("number")
+     * @Type("float")
      */
     protected $currencyFactor;
 

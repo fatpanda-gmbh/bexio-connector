@@ -19,14 +19,14 @@ class CalendarYear implements ContainerInterface
     /**
      * @var DateTime
      * @SerializedName("start")
-     * @Type("DateTime<'Y-m-d H:i:s'>")
+     * @Type("DateTime<'Y-m-d'>")
      */
     protected $start;
 
     /**
      * @var DateTime
      * @SerializedName("end")
-     * @Type("DateTime<'Y-m-d H:i:s'>")
+     * @Type("DateTime<'Y-m-d'>")
      */
     protected $end;
 
@@ -40,14 +40,14 @@ class CalendarYear implements ContainerInterface
     /**
      * @var DateTime
      * @SerializedName("created_at")
-     * @Type("DateTime<'Y-m-d H:i:s'>")
+     * @Type("DateTime<'Y-m-d\TH:i:sP'>")
      */
     protected $createdAt;
 
     /**
      * @var DateTime
      * @SerializedName("updated_at")
-     * @Type("DateTime<'Y-m-d H:i:s'>")
+     * @Type("DateTime<'Y-m-d\TH:i:sP'>")
      */
     protected $updatedAt;
 

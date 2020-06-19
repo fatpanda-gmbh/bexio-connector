@@ -31,26 +31,32 @@ class TimesheetRangeBody implements ContainerInterface
     protected $end;
 
     /**
-     * @return string
+     * @param string $type
+     * @return TimesheetRangeBody
      */
-    public function getType(): string
+    public function setType(string $type): TimesheetRangeBody
     {
-        return $this->type;
+        $this->type = $type;
+        return $this;
     }
 
     /**
-     * @return DateTime
+     * @param DateTime $start
+     * @return TimesheetRangeBody
      */
-    public function getStart(): DateTime
+    public function setStart(DateTime $start): TimesheetRangeBody
     {
-        return $this->start;
+        $this->start = $start;
+        return $this;
     }
 
     /**
-     * @return DateTime
+     * @param DateTime $end
+     * @return TimesheetRangeBody
      */
-    public function getEnd(): DateTime
+    public function setEnd(DateTime $end): TimesheetRangeBody
     {
-        return $this->end;
+        $this->end = $end;
+        return $this;
     }
 }
