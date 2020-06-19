@@ -4,11 +4,14 @@ namespace Fatpanda\BexioConnector\RequestBody\Sales\Invoices;
 
 use DateTime;
 use Fatpanda\BexioConnector\RequestBody\AbstractBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\PositionTrait;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
 
 class InvoiceBody extends AbstractBody
 {
+    use PositionTrait;
+
     public const MWST_TYPE_INCLUDING_TAXES = 0;
     public const MWST_TYPE_EXCLUDING_TAXES = 1;
     public const MWST_TYPE_EXEMPT_FROM_TAXES = 2;
@@ -148,13 +151,6 @@ class InvoiceBody extends AbstractBody
      * @Type("string")
      */
     protected $apiReference;
-
-    /**
-     * @var array
-     * @SerializedName("positions")
-     * @Type("array")
-     */
-    protected $positions = [];
 
     /**
      * @param string|null $title
@@ -361,17 +357,6 @@ class InvoiceBody extends AbstractBody
     public function setApiReference(?string $apiReference): InvoiceBody
     {
         $this->apiReference = $apiReference;
-
-        return $this;
-    }
-
-    /**
-     * @param array $positions
-     * @return InvoiceBody
-     */
-    public function setPositions(array $positions = []): InvoiceBody
-    {
-        $this->positions = $positions;
 
         return $this;
     }
