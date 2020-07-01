@@ -2,6 +2,7 @@
 
 namespace Fatpanda\BexioConnector\Tests;
 
+use DateTime;
 use Fatpanda\BexioConnector\BexioConnector;
 use Fatpanda\BexioConnector\Container\Accounting\Account;
 use Fatpanda\BexioConnector\Container\Accounting\AccountGroup;
@@ -116,6 +117,7 @@ use Fatpanda\BexioConnector\RequestBody\Projects\CommunicationTypes\Communicatio
 use Fatpanda\BexioConnector\RequestBody\Projects\Projects\ProjectBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Projects\ProjectsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetBody;
+use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetDurationBody;
 use Fatpanda\BexioConnector\RequestBody\Projects\Timesheets\TimesheetsSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Comments\CommentBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\DefaultPositions\DefaultPositionBody;
@@ -132,6 +134,7 @@ use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrderBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrderRepetitionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Orders\OrdersSearchBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Orders\PositionsArrayBody;
+use Fatpanda\BexioConnector\RequestBody\Sales\Orders\RepetitionYearly;
 use Fatpanda\BexioConnector\RequestBody\Sales\PagebreakPositions\PagebreakPositionBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\CopyQuoteBody;
 use Fatpanda\BexioConnector\RequestBody\Sales\Quotes\QuoteBody;
@@ -214,7 +217,13 @@ class BexioConnectorTest extends TestCase
     public function testAccount()
     {
         $responseBodyClass = Account::class;
+
         $query = new AccountsRequestQuery();
+        $query
+            ->setLimit(1)
+            ->setOffset(1)
+        ;
+
         $searchBody = new AccountsSearchBody();
         /** @var AccountsSearchBodyItem $item */
         $item = $searchBody->createItem();
@@ -403,6 +412,10 @@ class BexioConnectorTest extends TestCase
     {
         $responseBodyClass = AdditionalAddress::class;
         $query = new AdditionalAddressesRequestQuery();
+        $query->setOrderBy([
+            $query::ORDER_BY_ID,
+            $query::ORDER_BY_NAME => $query::SORT_ORDER_DESC,
+        ]);
         $body = new AdditionalAddressBody();
         $searchBody = new AdditionalAddressesSearchBody();
 
@@ -535,6 +548,12 @@ class BexioConnectorTest extends TestCase
         $responseBodyClass = Timesheet::class;
         $query = new TimesheetsRequestQuery();
         $body = new TimesheetBody();
+        $body->setText('text');
+        $body->setTracking(
+            (new TimesheetDurationBody())
+                ->setDate(new DateTime('2019-05-20'))
+                ->setDuration('01:40')
+        );
         $searchBody = new TimesheetsSearchBody();
 
         $this->runListRequest('getTimesheetsList', $responseBodyClass, [], $query);
@@ -1135,6 +1154,11 @@ class BexioConnectorTest extends TestCase
 
         $responseBodyClass = OrderRepetition::class;
         $body = new OrderRepetitionBody();
+        $body
+            ->setStart(new DateTime('2019-01-01'))
+            ->setEnd(new DateTime('2019-12-31'))
+            ->setRepetition((new RepetitionYearly())->setInterval(1))
+        ;
         $this->runRequest('getOrderRepetition', $responseBodyClass, [self::REQUEST_PARAM_INT]);
         $this->runRequest('postOrderRepetition', $responseBodyClass, [self::REQUEST_PARAM_INT, $body]);
         $this->runRequest('deleteOrderRepetition', $responseBodySuccessClass, [self::REQUEST_PARAM_INT]);

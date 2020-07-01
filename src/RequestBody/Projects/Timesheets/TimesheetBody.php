@@ -95,7 +95,6 @@ class TimesheetBody extends AbstractBody
     /**
      * @var TimesheetDurationBody|TimesheetRangeBody
      * @SerializedName("tracking")
-     * @Type("object")
      */
     protected $tracking;
 

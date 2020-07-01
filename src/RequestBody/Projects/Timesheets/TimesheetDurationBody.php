@@ -3,23 +3,22 @@
 namespace Fatpanda\BexioConnector\RequestBody\Projects\Timesheets;
 
 use DateTime;
-use Fatpanda\BexioConnector\Container\ContainerInterface;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
 
-class TimesheetDurationBody implements ContainerInterface
+class TimesheetDurationBody
 {
     /**
      * @var string
      * @SerializedName("type")
      * @Type("string")
      */
-    protected $type;
+    protected $type = 'duration';
 
     /**
      * @var DateTime
      * @SerializedName("date")
-     * @Type("DateTime<'Y-m-d H:i:s'>")
+     * @Type("DateTime<'Y-m-d'>")
      */
     protected $date;
 
@@ -29,16 +28,6 @@ class TimesheetDurationBody implements ContainerInterface
      * @Type("string")
      */
     protected $duration;
-
-    /**
-     * @param string $type
-     * @return TimesheetDurationBody
-     */
-    public function setType(string $type): TimesheetDurationBody
-    {
-        $this->type = $type;
-        return $this;
-    }
 
     /**
      * @param DateTime $date

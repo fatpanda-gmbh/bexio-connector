@@ -26,7 +26,6 @@ class OrderRepetitionBody extends AbstractBody
     /**
      * @var RepetitionInterface
      * @SerializedName("repetition")
-     * @Type("OrderRepetitionInterface")
      */
     protected $repetition;
 
