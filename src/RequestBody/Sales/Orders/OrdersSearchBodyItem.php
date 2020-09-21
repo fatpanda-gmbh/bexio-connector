@@ -20,4 +20,9 @@ class OrdersSearchBodyItem extends AbstractSearchBodyItem
     public const SEARCH_FIELD_IS_VALID_FROM = 'is_valid_from';
     public const SEARCH_FIELD_IS_VALID_TO = 'is_valid_to';
     public const SEARCH_FIELD_UPDATED_AT = 'updated_at';
+
+    public const ITEM_STATUS_PENDING = 5;
+    public const ITEM_STATUS_DONE = 6;
+    public const ITEM_STATUS_PARTIAL = 15;
+    public const ITEM_STATUS_CANCELED = 21;
 }

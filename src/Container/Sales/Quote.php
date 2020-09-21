@@ -9,6 +9,13 @@ use JMS\Serializer\Annotation\Type;
 
 class Quote implements ContainerInterface
 {
+    public const ITEM_STATUSES = [
+        1 => 'Draft',
+        2 => 'Pending',
+        3 => 'Confirmed',
+        4 => 'Declined',
+    ];
+
     /**
      * @var int
      * @SerializedName("id")

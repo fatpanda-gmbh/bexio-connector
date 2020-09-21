@@ -9,6 +9,15 @@ use JMS\Serializer\Annotation\Type;
 
 class Invoice implements ContainerInterface
 {
+    public const ITEM_STATUSES = [
+        7 => 'Draft',
+        8 => 'Pending',
+        9 => 'Paid',
+        16 => 'Partial',
+        19 => 'Canceled',
+        31 => 'Unpaid',
+    ];
+
     /**
      * @var int
      * @SerializedName("id")

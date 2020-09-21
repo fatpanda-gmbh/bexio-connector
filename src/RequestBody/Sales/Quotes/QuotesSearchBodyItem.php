@@ -21,4 +21,9 @@ class QuotesSearchBodyItem extends AbstractSearchBodyItem
     public const SEARCH_FIELD_IS_VALID_TO = 'is_valid_to';
     public const SEARCH_FIELD_IS_VALID_UNTIL = 'is_valid_until';
     public const SEARCH_FIELD_UPDATED_AT = 'updated_at';
+
+    public const ITEM_STATUS_DRAFT = 1;
+    public const ITEM_STATUS_PENDING = 2;
+    public const ITEM_STATUS_CONFIRMED = 3;
+    public const ITEM_STATUS_DECLINED = 4;
 }

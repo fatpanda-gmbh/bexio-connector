@@ -9,6 +9,13 @@ use JMS\Serializer\Annotation\Type;
 
 class Order implements ContainerInterface
 {
+    public const ITEM_STATUSES = [
+        5 => 'Pending',
+        6 => 'Done',
+        15 => 'Partial',
+        21 => 'Canceled',
+    ];
+
     /**
      * @var int
      * @SerializedName("id")

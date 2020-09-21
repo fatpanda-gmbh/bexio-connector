@@ -9,6 +9,12 @@ use JMS\Serializer\Annotation\Type;
 
 class Delivery implements ContainerInterface
 {
+    public const ITEM_STATUSES = [
+        10 => 'Draft',
+        18 => 'Done',
+        20 => 'Canceled',
+    ];
+
     /**
      * @var int
      * @SerializedName("id")
