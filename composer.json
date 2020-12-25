@@ -1,7 +1,7 @@
 {
   "name": "fatpanda-gmbh/bexio-connector",
   "type": "library",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "A php library to communicate with the API of Bexio",
   "keywords": ["bexio"],
   "homepage": "https://github.com/fatpanda-gmbh/bexio-connector",
@@ -22,8 +22,8 @@
   ],
   "require": {
     "php": ">=7.1",
-    "jms/serializer": "^1.11 || ^2.0",
-    "guzzlehttp/guzzle": "~6.0",
+    "jms/serializer": "^1.11 || ^2.0 || ^3.0",
+    "guzzlehttp/guzzle": "^6.0 || ^7.0",
     "psr/log": "^1.1"
   },
   "require-dev": {
